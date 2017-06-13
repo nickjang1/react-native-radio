@@ -1,20 +1,21 @@
 const colors = {
-  headerColor: '#000000',
-  itemColor: '#292929',
+  headerColor: '#0C0C0C',
+  itemColor: '#1F1F1F',
+  itemActiveColor: '#0C0C0C',
 
-  brandPrimary: '#000000',
-  brandSecondary: '#27C87D',
+  brandPrimary: '#0C0C0C',
+  brandSecondary: '#1F1F1F',
   brandThird: '#1E80C7',
 
-  textPrimary: '#FFFFFF',
-  textSecondary: '#000000',
-  textThird: '#555555',
+  textPrimary: '#D8D8D8',
+  textSecondary: '#989898',
+  textThird: '#6B6B6B',
   textFourth: '#89979F',
   textPlaceholder: '#DDDDDD',
   fieldPlaceholder: '#999999',
 
-  backgroundPrimary: '#F0F3EA',
-  backgroundSecondary: '#FFFFFF',
+  backgroundPrimary: '#0C0C0C',
+  backgroundSecondary: '#1F1F1F',
   backgroundThird: '#e1e8ee',
 
   borderPrimary: '#DDDDDD',

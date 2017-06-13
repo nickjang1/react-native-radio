@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, Image, DeviceEventEmitter, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, DeviceEventEmitter, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NavigationBar from 'react-native-navbar';
+import HTMLView from 'react-native-htmlview';
 import { connect } from 'react-redux';
 import { SliderVolumeController } from 'react-native-volume-controller';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -14,6 +15,16 @@ import Api from '@api';
 import Global from '@src/global';
 
 const DEMO_OPTIONS_1 = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9'];
+
+const descStyles = StyleSheet.create({
+  p: {
+    color: Colors.textPrimary,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+});
 
 class Player extends Component {
   constructor(props) {
@@ -45,9 +56,18 @@ class Player extends Component {
     );
 
     ReactNativeAudioStreaming.getStatus((error, status) => {
-      (error) ? console.log(error) : this.props.setPlayerStatus(status);
+      if (error) {
+        console.log(error);
+        return;
+      }
+      this.props.setPlayerStatus(status);
     });
   }
+
+  onUserPressed() {
+    this.props.navigation.goBack();
+  }
+
   _onPress() {
     switch (this.props.globals.playerStatus) {
       case Global.PLAYING:
@@ -66,6 +86,8 @@ class Player extends Component {
       case Global.BUFFERING:
         ReactNativeAudioStreaming.stop();
         break;
+      default:
+        break;
     }
   }
 
@@ -74,26 +96,24 @@ class Player extends Component {
     this.props.setDetail(detail);
     ReactNativeAudioStreaming.play(detail.channels[0].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
   }
-  onUserPressed() {
-    this.props.navigation.goBack();
-  }
+
   render() {
     let playerButton = null;
     switch (this.props.globals.playerStatus) {
       case Global.PLAYING:
       case Global.STREAMING:
-        playerButton = <Image
+        playerButton = (<Image
           style={{ width: 100, height: 35 }}
           resizeMode={'stretch'}
-          source={Images.stop} />;
+          source={Images.stop} />);
         break;
       case Global.PAUSED:
       case Global.STOPPED:
       case Global.ERROR:
-        playerButton = <Image
+        playerButton = (<Image
           style={{ width: 100, height: 35 }}
           resizeMode={'stretch'}
-          source={Images.play} />;
+          source={Images.play} />);
         break;
       case Global.BUFFERING:
       case Global.BUFFERING_START:
@@ -104,7 +124,10 @@ class Player extends Component {
           size="small"
                 />);
         break;
+      default:
+        break;
     }
+
     return (
       <View style={{ flex: 1 }} >
         {CommonWidgets.renderStatusBar(Colors.headerColor)}
@@ -144,7 +167,7 @@ class Player extends Component {
                   source={{ src: this.props.globals.detail === null ? '' : this.props.globals.detail.logo }} />
               </View>
               <View style={{ }}>
-                <Text style={{ color: 'white', marginTop: 30 }}>{ this.props.globals.detail === null ? '' : this.props.globals.detail.description}</Text>
+                <HTMLView stylesheet={descStyles} value={this.props.globals.detail === null ? '' : this.props.globals.detail.description} />
               </View>
             </View>
 
@@ -168,3 +191,4 @@ function mapStateToProps(state) {
   return { globals };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Player);
+

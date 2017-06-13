@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, View, TextInput, TouchableOpacity,  FlatList, ActivityIndicator } from 'react-native';
+import { Image, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -12,6 +12,15 @@ import { setRadios } from '@actions/globals';
 import Api from '@api';
 
 import Utils from '@src/utils';
+
+const styles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    width: null,
+    height: null,
+    padding: Metrics.defaultMargin * 2,
+  },
+});
 
 class Home extends Component {
   constructor(props) {
@@ -87,23 +96,23 @@ class Home extends Component {
                 textStyle={{ color: 'white' }}
                 showsVerticalScrollIndicator
                 defaultValue={'Select Location'}
-                onSelect={(item) => this.searchLocation(item)}
-                renderRow={( item ) => CommonWidgets.renderMenuListItem(item)}
+                onSelect={item => this.searchLocation(item)}
+                renderRow={item => CommonWidgets.renderMenuListItem(item)}
                 options={this.props.globals.locations} />
               <ModalDropdown
                 style={{ flex: 1, top: 5, paddingLeft: 30, paddingRight: 30, left: 0 }}
                 textStyle={{ color: 'white' }}
                 showsVerticalScrollIndicator
                 defaultValue={'Select Genre'}
-                onSelect={(item) => this.searchGenre(item)}
-                renderRow={(item) => CommonWidgets.renderMenuListItem(item)}
+                onSelect={item => this.searchGenre(item)}
+                renderRow={item => CommonWidgets.renderMenuListItem(item)}
                 options={this.props.globals.genres} />
             </View>
           </View>
 
           <Image
-            style={{ flex: 1, width: null, height: null, paddingTop: 15 }}
-            resizeMode={'stretch'}
+            style={styles.listContainer}
+            resizeMode={'cover'}
             source={Images.background}>
             <FlatList
               keyboardShouldPersistTaps={'always'}

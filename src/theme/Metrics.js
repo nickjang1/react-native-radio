@@ -6,13 +6,16 @@ const sHeight = width < height ? height : width;
 const sWidth = width < height ? width : height;
 const dMargin = 10;
 const metrics = {
-  searchBarHeight: 30,
   screenWidth: sWidth,
   screenHeight: sHeight,
+
+  searchBarHeight: 30,
   navBarHeight: sHeight * 0.09,
   tabBarHeight: sHeight * 0.073,
+
   defaultMargin: dMargin,
   defaultPadding: dMargin,
+
   listItemHeight: sHeight / 9,
   appleSize: sHeight / 15,
   contentHeight: sHeight - 110,

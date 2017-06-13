@@ -38,7 +38,7 @@
     "clearImmediate": true,
     "clearInterval": false,
     "clearTimeout": false,
-    "console": false,
+    "console": true,
     "document": false,
     "escape": false,
     "exports": false,

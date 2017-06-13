@@ -76,15 +76,13 @@ const Styles = {
   },
   listItemContainer: {
     width: Metrics.listItemWidth,
-    borderBottomWidth: 0.5,
-    borderBottomColor: Colors.borderPrimary,
     alignSelf: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.itemColor,
-    marginBottom: 5,
+    marginBottom: Metrics.defaultMargin * 0.8,
   },
   menuItemContainer: {
-    width: Metrics.screenWidth / 2 - 20,
+    width: (Metrics.screenWidth * 0.5) - 20,
     borderBottomWidth: 0.5,
     borderBottomColor: Colors.borderPrimary,
     alignSelf: 'center',
@@ -136,16 +134,16 @@ const Styles = {
     paddingTop: Metrics.defaultPadding,
   },
   avatar: {
-    width: Metrics.appleSize * 3 / 2,
-    height: Metrics.appleSize * 3 / 2,
-    borderRadius: Metrics.appleSize * 3 / 4,
+    width: Metrics.appleSize * 1.5,
+    height: Metrics.appleSize * 1.5,
+    borderRadius: Metrics.appleSize * 0.75,
     borderWidth: 0.5,
     borderColor: Colors.borderPrimary,
   },
   avatarMedium: {
     width: Metrics.appleSize,
     height: Metrics.appleSize,
-    borderRadius: Metrics.appleSize / 2,
+    borderRadius: Metrics.appleSize * 0.5,
     borderWidth: 0.5,
     borderColor: Colors.borderPrimary,
   },
@@ -157,9 +155,9 @@ const Styles = {
     borderColor: Colors.borderPrimary,
   },
   avatarSmall: {
-    width: Metrics.appleSize * 3 / 5,
-    height: Metrics.appleSize * 3 / 5,
-    borderRadius: Platform.OS === 'android' ? Metrics.appleSize * 3 / 5 : Metrics.appleSize * 3 / 10,
+    width: Metrics.appleSize * 0.6,
+    height: Metrics.appleSize * 3,
+    borderRadius: Platform.OS === 'android' ? Metrics.appleSize * 0.6 : Metrics.appleSize * 0.3,
     borderWidth: 0.5,
     borderColor: Colors.borderPrimary,
   },
@@ -197,13 +195,6 @@ const Styles = {
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
-
-
-
-
-
-
-
 
   buttonShadow: {
     shadowOpacity: 0.3,

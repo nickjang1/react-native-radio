@@ -5,6 +5,7 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
+  TouchableHighlight,
   Image,
   ScrollView,
   Animated,
@@ -15,6 +16,7 @@ import {
 import I18n from 'react-native-i18n';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Metrics, Styles, Colors, Fonts, Images } from '@theme/';
+import ReviewListItem from './ReviewListItem';
 import styles from './styles';
 
 const CommonWidgets = {
@@ -24,6 +26,7 @@ const CommonWidgets = {
       Alert.alert('', message);
     }, 50);
   },
+
   renderStatusBar(color) {
     if (Platform.OS === 'android') {
       return (
@@ -42,35 +45,39 @@ const CommonWidgets = {
       </View>
     );
   },
+
   renderNavBarLeftButton() {
     return (
       <Image
-        style={{ width: Metrics.screenWidth * 0.7, height: 40, tintColor: 'white' }}
-        resizeMode={'stretch'}
+        style={styles.navBarLeft}
+        resizeMode={'contain'}
         source={Images.logo} />
     );
   },
+
   renderNavBarRightButton(onPress) {
     return (
       <TouchableOpacity
-        style={{ paddingBottom: 0 }}
+        style={styles.navBarRightClose}
         onPress={onPress} >
         <Image
-          style={{ width: 35, height: 35 }}
-          resizeMode={'stretch'}
+          style={styles.navBarRightCloseImage}
+          resizeMode={'contain'}
           source={Images.close} />
       </TouchableOpacity>
     );
   },
+
   renderNavBarRightButtonSearch(onPress) {
     return (
       <TouchableOpacity
-        style={{ paddingBottom: 8 }}
+        style={styles.navbarRightSearch}
         onPress={onPress} >
-        <Icon name="search" size={25} color="white" />
+        <Icon name="search" style={styles.navBarRightSearchIcon} />
       </TouchableOpacity>
     );
   },
+
   renderMenuListItem(item) {
     return (
       <TouchableOpacity
@@ -86,47 +93,10 @@ const CommonWidgets = {
       </TouchableOpacity>
     );
   },
+
   renderReviewListItem(item, onPress) {
     return (
-      <TouchableOpacity
-        key={item.id}
-        style={Styles.listItemContainer}
-        onPress={onPress}>
-        <View style={{ padding: Metrics.defaultPadding / 2, paddingBottom: 0, flexDirection: 'row', backgroundColor: Colors.itemColor }}>
-          <Image
-            source={{ uri: item.logo, width: 80, height: 65 }}
-          />
-          <View>
-            <Text style={{ padding: 5, fontSize: 15, paddingBottom: 0, color: '#ffffff', margin: 0 }}>
-              {item.name}
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                Frecuencla
-              </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                {item.frequency}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                Localidad
-              </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                {item.location}
-              </Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                Telefono
-              </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9,  color: '#ffffff'}}>
-                809-565-4567
-              </Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
+      <ReviewListItem item={item} onPress={onPress} />
     );
   },
 };
