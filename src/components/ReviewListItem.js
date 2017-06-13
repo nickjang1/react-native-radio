@@ -13,7 +13,12 @@ const styles = StyleSheet.create({
     width: Metrics.listItemWidth,
     alignSelf: 'center',
     justifyContent: 'center',
-    marginBottom: Metrics.defaultMargin * 0.8,
+    marginBottom: Metrics.defaultMargin,
+    shadowColor: Colors.backgroundPrimary,
+    shadowOffset: { width: 1, height: 1 },
+    shadowRadius: 2,
+    shadowOpacity: 1,
+    borderRadius: 20,
   },
   listItemNormal: {
     backgroundColor: Colors.itemColor,
@@ -21,22 +26,55 @@ const styles = StyleSheet.create({
   listItemActive: {
     backgroundColor: Colors.itemActiveColor,
   },
+  listItemInner: {
+    flexDirection: 'row',
+    padding: Metrics.defaultPadding,
+  },
+  listItemLogo: {
+    width: 80,
+    height: 65,
+    borderRadius: 3,
+    marginLeft: Metrics.defaultPadding,
+  },
+  listItemInfo: {
+    flex: 1,
+    marginLeft: 20,
+  },
+  listItemName: {
+    marginBottom: 5,
+    fontSize: 15,
+    color: Colors.textPrimary,
+  },
+  row: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  listItemLabel: {
+    flex: 2,
+    marginLeft: 10,
+    fontSize: 9,
+    color: Colors.textPrimary,
+  },
+  listItemValue: {
+    flex: 3,
+    marginLeft: 10,
+    fontSize: 9,
+    color: Colors.textPrimary,
+  },
 });
 
 export default class RadioListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pressed: true,
+      pressed: false,
     };
   }
 
   _onHideUnderlay() {
-    console.log('pressed');
     this.setState({ pressed: false });
   }
   _onShowUnderlay() {
-    console.log('no');
     this.setState({ pressed: true });
   }
 
@@ -49,35 +87,36 @@ export default class RadioListItem extends Component {
         onHideUnderlay={this._onHideUnderlay.bind(this)}
         onShowUnderlay={this._onShowUnderlay.bind(this)}
         onPress={this.props.onPress}>
-        <View style={{ padding: Metrics.defaultPadding / 2, paddingBottom: 0, flexDirection: 'row', backgroundColor: Colors.itemColor }}>
+        <View style={styles.listItemInner}>
           <Image
-            source={{ uri: this.props.item.logo, width: 80, height: 65 }}
+            source={{ uri: this.props.item.logo }}
+            style={styles.listItemLogo}
           />
-          <View>
-            <Text style={{ padding: 5, fontSize: 15, paddingBottom: 0, color: '#ffffff', margin: 0 }}>
+          <View style={styles.listItemInfo}>
+            <Text style={styles.listItemName}>
               {this.props.item.name}
             </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+            <View style={styles.row}>
+              <Text style={styles.listItemLabel}>
                 Frecuencla
               </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+              <Text style={styles.listItemValue}>
                 {this.props.item.frequency}
               </Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+            <View style={styles.row}>
+              <Text style={styles.listItemLabel}>
                 Localidad
               </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+              <Text style={styles.listItemValue}>
                 {this.props.item.location}
               </Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: Metrics.screenWidth * 0.2, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+            <View style={styles.row}>
+              <Text style={styles.listItemLabel}>
                 Telefono
               </Text>
-              <Text style={{ width: Metrics.screenWidth * 0.3, paddingLeft: 10, fontSize: 9, color: Colors.textPrimary }}>
+              <Text style={styles.listItemValue}>
                 809-565-4567
               </Text>
             </View>

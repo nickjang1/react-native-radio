@@ -7,7 +7,7 @@ const colors = {
   brandSecondary: '#1F1F1F',
   brandThird: '#1E80C7',
 
-  textPrimary: '#D8D8D8',
+  textPrimary: '#909090',
   textSecondary: '#989898',
   textThird: '#6B6B6B',
   textFourth: '#89979F',
