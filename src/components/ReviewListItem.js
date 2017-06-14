@@ -10,15 +10,13 @@ import { Metrics, Colors } from '@theme/';
 
 const styles = StyleSheet.create({
   listItem: {
-    width: Metrics.listItemWidth,
-    alignSelf: 'center',
-    justifyContent: 'center',
     marginBottom: Metrics.defaultMargin,
     shadowColor: Colors.backgroundPrimary,
     shadowOffset: { width: 1, height: 1 },
     shadowRadius: 2,
     shadowOpacity: 1,
-    borderRadius: 20,
+    borderRadius: 5,
+    flex: 1,
   },
   listItemNormal: {
     backgroundColor: Colors.itemColor,

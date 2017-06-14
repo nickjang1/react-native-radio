@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, View, TextInput, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -14,47 +14,78 @@ import Api from '@api';
 import Utils from '@src/utils';
 
 const styles = StyleSheet.create({
-  listContainer: {
+  searchTextInput: {
+    color: Colors.textThird,
+    width: 50,
+    height: 40,
     flex: 1,
-    width: null,
-    height: null,
-    padding: Metrics.defaultMargin * 2,
+  },
+  searchButton: {
+    marginTop: 10,
+  },
+  searchButtonIcon: {
+    fontSize: 22,
+    color: Colors.textThird,
+  },
+  searchUnderline: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.borderPrimary,
+  },
+  searchLocation: {
+    flex: 1,
+    marginRight: Metrics.defaultMargin,
+    top: Metrics.defaultMargin,
+  },
+  searchGenre: {
+    marginLeft: Metrics.defaultMargin,
+    flex: 1,
+    top: Metrics.defaultMargin,
   },
 });
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    const { width, height } = Dimensions.get('window');
     this.state = {
+      screenWidth: width,
+      screenHeight: height,
       searchKeyword: '',
       loading: false,
       page: 0,
       refreshing: false,
       searching: false,
+      locationPressed: false,
+      genrePressed: false,
     };
   }
+
+  onLayout() {
+    const { width, height } = Dimensions.get('window');
+    this.setState({
+      screenWidth: width,
+      screenHeight: height,
+    });
+  }
+
   onSearchKeywordInputChange(keyword) {
     this.setState({ searchKeyword: keyword });
   }
-  renderHeader() {
-    return null;
+
+  onUserPressed(item) {
+    this.props.navigation.navigate('player', { id: item.id });
   }
-  renderFooter() {
-    if (!this.state.loading) return null;
-    return (
-      <ActivityIndicator size={'large'} />
-    );
-  }
-  handleRefresh() {
-  }
+
   handleLoadMore() {
     if (!this.state.loading) {
       console.log('load more.....');
     }
   }
-  onUserPressed(item) {
-    this.props.navigation.navigate('player', { id: item.id });
+
+  handleRefresh() {
   }
+
   async searchName() {
     const radios = await Api.getNameSearch(this.state.searchKeyword);
     this.props.setRadios(radios);
@@ -67,65 +98,123 @@ class Home extends Component {
     const radios = await Api.getGenreSearch(this.props.globals.genres[index]);
     this.props.setRadios(radios);
   }
+
+  renderHeader() {
+    return null;
+  }
+  renderFooter() {
+    if (!this.state.loading) return null;
+    return (
+      <ActivityIndicator size={'large'} />
+    );
+  }
   render() {
     return (
-      <View style={{ flex: 1 }} >
+      <View style={Styles.container} >
+        {/* BACKGROUND */}
+        <Image
+          style={Styles.background}
+          resizeMode={'cover'}
+          source={Images.background} />
+
         {CommonWidgets.renderStatusBar(Colors.headerColor)}
+
+        {/* NAVIGATIONS */}
         <NavigationBar
           statusBar={{ style: 'light-content' }}
           style={Styles.navBarStyle}
           tintColor={Colors.brandSecondary}
           leftButton={CommonWidgets.renderNavBarLeftButton()}
           rightButton={CommonWidgets.renderNavBarRightButton(() => this.props.navigation.goBack())} />
-        <View style={[Styles.listContainer]}>
-          <View style={{ width: Metrics.screenWidth, justifyContent: 'center', alignItems: 'center', height: 100, backgroundColor: '#1f1f1f' }}>
-            <View style={{ flexDirection: 'row' }}>
-              <SearchBar
-                containerStyle={{ flex: 1, backgroundColor: '#1f1f1f', borderTopWidth: 0, borderBottomWidth: 0 }}
-                inputStyle={[{ backgroundColor: '#9f9f9f', color: 'white' }]}
-                placeholder="Type Here..."
-                onChangeText={this.onSearchKeywordInputChange.bind(this)} />
-              <TouchableOpacity onPress={() => this.searchName()}>
-                <Icon name="search" size={25} color="white" style={{ marginTop: 15 }} />
-              </TouchableOpacity>
 
-            </View>
-            <View style={{ flexDirection: 'row' }}>
+        {/* SEARCH BOX */}
+        <View style={Styles.topContainer}>
+          <View style={Styles.row}>
+            <TextInput
+              underlineColorAndroid={'transparent'}
+              placeholderTextColor={Colors.textPlaceholder}
+              style={styles.searchTextInput}
+              placeholder={'Type Here...'}
+              onChangeText={this.onSearchKeywordInputChange.bind(this)}
+              onSubmitEditing={() => this.searchName()} />
+            <TouchableOpacity onPress={() => this.searchName()} style={styles.searchButton}>
+              <Icon name="search" style={styles.searchButtonIcon} />
+            </TouchableOpacity>
+          </View>
+          <View style={Styles.row}>
+            <View style={styles.searchUnderline} />
+          </View>
+          <View style={Styles.row}>
+            <View style={[Styles.dropdownContainer, styles.searchLocation]}>
               <ModalDropdown
-                style={{ flex: 1, top: 5, paddingLeft: 30, paddingRight: 30, left: 0 }}
-                textStyle={{ color: 'white' }}
+                style={Styles.dropdown}
+                dropdownStyle={Styles.dropdownBox}
+                textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
                 defaultValue={'Select Location'}
+                adjustFrame={(style) => {
+                  const output = style;
+                  output.width = (this.state.screenWidth - (Metrics.defaultPadding * 4));
+                  return output;
+                }}
                 onSelect={item => this.searchLocation(item)}
-                renderRow={item => CommonWidgets.renderMenuListItem(item)}
+                onDropdownWillShow={() => {
+                  this.setState({
+                    locationPressed: true,
+                  });
+                }}
+                onDropdownWillHide={() => {
+                  this.setState({
+                    locationPressed: false,
+                  });
+                }}
+                renderRow={item => CommonWidgets.renderLocationMenuListItem(item)}
                 options={this.props.globals.locations} />
+              <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
+            </View>
+            <View style={[Styles.dropdownContainer, styles.searchGenre]}>
               <ModalDropdown
-                style={{ flex: 1, top: 5, paddingLeft: 30, paddingRight: 30, left: 0 }}
-                textStyle={{ color: 'white' }}
+                style={Styles.dropdown}
+                dropdownStyle={Styles.dropdownBox}
+                textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
                 defaultValue={'Select Genre'}
+                adjustFrame={(style) => {
+                  const output = style;
+                  output.width = (this.state.screenWidth - (Metrics.defaultPadding * 6)) / 2;
+                  return output;
+                }}
                 onSelect={item => this.searchGenre(item)}
-                renderRow={item => CommonWidgets.renderMenuListItem(item)}
+                onDropdownWillShow={() => {
+                  this.setState({
+                    genrePressed: true,
+                  });
+                }}
+                onDropdownWillHide={() => {
+                  this.setState({
+                    genrePressed: false,
+                  });
+                }}
+                renderRow={item => CommonWidgets.renderGenreMenuListItem(item)}
                 options={this.props.globals.genres} />
+              <Icon name={this.state.genrePressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
             </View>
           </View>
+        </View>
 
-          <Image
-            style={styles.listContainer}
-            resizeMode={'cover'}
-            source={Images.background}>
-            <FlatList
-              keyboardShouldPersistTaps={'always'}
-              data={this.props.globals.radios}
-              renderItem={({ item }) => CommonWidgets.renderReviewListItem(item, () => this.onUserPressed(item))}
-              keyExtractor={item => item.id}
-              ListHeaderComponent={this.renderHeader.bind(this)}
-              ListFooterComponent={this.renderFooter.bind(this)}
-              onRefresh={this.handleRefresh.bind(this)}
-              refreshing={this.state.refreshing}
-              onEndReached={this.handleLoadMore.bind(this)}
-              onEndReachedThreshold={50} />
-          </Image>
+        {/* RADIO ITEMS */}
+        <View style={Styles.contentContainer}>
+          <FlatList
+            keyboardShouldPersistTaps={'always'}
+            data={this.props.globals.radios}
+            renderItem={({ item }) => CommonWidgets.renderReviewListItem(item, () => this.onUserPressed(item))}
+            keyExtractor={item => item.id}
+            ListHeaderComponent={this.renderHeader.bind(this)}
+            ListFooterComponent={this.renderFooter.bind(this)}
+            onRefresh={this.handleRefresh.bind(this)}
+            refreshing={this.state.refreshing}
+            onEndReached={this.handleLoadMore.bind(this)}
+            onEndReachedThreshold={50} />
         </View>
       </View>
     );

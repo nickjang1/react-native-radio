@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, DeviceEventEmitter, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, DeviceEventEmitter, Image, Dimensions, StyleSheet, Text, TouchableOpacity, View, WebView } from 'react-native';
 import NavigationBar from 'react-native-navbar';
-import HTMLView from 'react-native-htmlview';
 import { connect } from 'react-redux';
 import { SliderVolumeController } from 'react-native-volume-controller';
 import ModalDropdown from 'react-native-modal-dropdown';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
 
 import { setDetail, setPlayerStatus } from '@actions/globals';
@@ -16,13 +16,52 @@ import Global from '@src/global';
 
 const DEMO_OPTIONS_1 = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9'];
 
-const descStyles = StyleSheet.create({
-  p: {
+const styles = StyleSheet.create({
+  topName: {
+    marginTop: Metrics.defaultMargin * 0.4,
+    fontSize: 10,
     color: Colors.textPrimary,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingTop: 0,
-    paddingBottom: 0,
+  },
+  content: {
+    flex: 1,
+    backgroundColor: Colors.backgroundSecondary,
+    padding: Metrics.defaultPadding * 2,
+  },
+  contentLocationLabel: {
+    fontSize: 15,
+    color: Colors.textThird,
+  },
+  contentLocation: {
+    flex: 1,
+    marginTop: Metrics.defaultMargin,
+  },
+  contentName: {
+    marginTop: Metrics.defaultMargin * 1.5,
+    flex: 1,
+    fontSize: 16,
+    color: Colors.textThird,
+    justifyContent: 'center',
+    textAlign: 'center',
+  },
+  contentLogo: {
+    marginTop: Metrics.defaultMargin * 1.5,
+    width: 120,
+    height: 90,
+    paddingTop: 15,
+    margin: 10,
+    borderRadius: 2,
+  },
+  contentLine: {
+    marginTop: Metrics.defaultMargin * 1.5,
+    flex: 1,
+    height: 1,
+    backgroundColor: Colors.borderPrimary,
+  },
+  contentDescription: {
+    backgroundColor: Colors.backgroundSecondary,
+    marginTop: Metrics.defaultMargin * 1.5,
+    width: '100%',
+    height: '100%',
   },
 });
 
@@ -30,11 +69,16 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this._onPress = this._onPress.bind(this);
+    const { width, height } = Dimensions.get('window');
     this.state = {
+      screenWidth: width,
+      screenHeight: height,
+      locationPressed: false,
       status: Global.STOPPED,
       song: '',
     };
   }
+
   componentWillMount() {
     const { params } = this.props.navigation.state;
     this.loadingDetailData(params.id);
@@ -57,10 +101,17 @@ class Player extends Component {
 
     ReactNativeAudioStreaming.getStatus((error, status) => {
       if (error) {
-        console.log(error);
         return;
       }
       this.props.setPlayerStatus(status);
+    });
+  }
+
+  onLayout() {
+    const { width, height } = Dimensions.get('window');
+    this.setState({
+      screenWidth: width,
+      screenHeight: height,
     });
   }
 
@@ -97,6 +148,10 @@ class Player extends Component {
     ReactNativeAudioStreaming.play(detail.channels[0].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
   }
 
+  volumeChange(value) {
+    console.log(value);
+  }
+
   render() {
     let playerButton = null;
     switch (this.props.globals.playerStatus) {
@@ -128,51 +183,97 @@ class Player extends Component {
         break;
     }
 
+    const logoSrc = this.props.globals.detail === null ? { src: '' } : { uri: this.props.globals.detail.logo };
+    let description = this.props.globals.detail === null ? '' : this.props.globals.detail.description;
+    description = `<style>body, html {font-family: 'Helvetica'; font-size: 14px; background-color: ${Colors.backgroundSecondary}; color: ${Colors.textPrimary};}</style><body>${description}</body>`;
+
     return (
-      <View style={{ flex: 1 }} >
+      <View style={Styles.container} >
+        <Image
+          style={Styles.background}
+          resizeMode={'cover'}
+          source={Images.background} />
+
         {CommonWidgets.renderStatusBar(Colors.headerColor)}
+
+        {/* NAVIGATION */}
         <NavigationBar
           statusBar={{ style: 'light-content' }}
           style={Styles.navBarStyle}
           tintColor={Colors.brandSecondary}
           rightButton={CommonWidgets.renderNavBarRightButtonSearch(() => this.props.navigation.goBack())}
           leftButton={CommonWidgets.renderNavBarLeftButton()} />
-        <View style={[Styles.listContainer]}>
-          <View style={{ width: Metrics.screenWidth, height: 100, alignItems: 'center', backgroundColor: '#181818' }}>
+
+        {/* PLAYER */}
+        <View style={Styles.topContainer}>
+          <View style={Styles.row}>
             <SliderVolumeController />
+          </View>
+          <View style={[Styles.row, Styles.center]}>
             <TouchableOpacity onPress={this._onPress}>
               {playerButton}
             </TouchableOpacity>
-            <Text style={{ fontSize: 10, color: 'white' }}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
           </View>
-          <Image
-            style={{ flex: 1, width: null, height: null, padding: 30 }}
-            resizeMode={'stretch'}
-            source={Images.background}>
+          <View style={[Styles.row, Styles.center]}>
+            <Text style={styles.topName}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
+          </View>
+        </View>
 
-            <View style={{ flex: 1, padding: 30, backgroundColor: '#151515' }}>
-              <Text style={{ fontSize: 15, color: 'white' }}>Ellge Localldad</Text>
-              <ModalDropdown
-                style={{ top: 10, left: 0 }}
-                textStyle={{ color: 'white' }}
-                showsVerticalScrollIndicator
-                defaultValue={'Select Items'}
-                renderRow={item => CommonWidgets.renderMenuListItem(item)}
-                options={DEMO_OPTIONS_1} />
-              <View style={{ alignItems: 'center', borderBottomWidth: 0.5, marginTop: 20, borderColor: 'white' }}>
-                <Text style={{ fontSize: 18, color: 'white' }}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
-                <Image
-                  style={{ width: 120, height: 90, paddingTop: 15, margin: 10 }}
-                  resizeMode={'stretch'}
-                  source={{ src: this.props.globals.detail === null ? '' : this.props.globals.detail.logo }} />
-              </View>
-              <View style={{ }}>
-                <HTMLView stylesheet={descStyles} value={this.props.globals.detail === null ? '' : this.props.globals.detail.description} />
+        {/* CONTENT */}
+        <View style={Styles.contentContainer}>
+          <View style={styles.content}>
+            <View style={Styles.row}>
+              <Text style={styles.contentLocationLabel}>Ellge Localldad</Text>
+            </View>
+            <View style={Styles.row}>
+              <View style={[Styles.dropdownContainer, styles.contentLocation]}>
+                <ModalDropdown
+                  style={Styles.dropdown}
+                  dropdownStyle={Styles.dropdownBox}
+                  textStyle={Styles.dropdownText}
+                  showsVerticalScrollIndicator
+                  defaultValue={'Select Locations'}
+                  adjustFrame={(style) => {
+                    const output = style;
+                    output.width = this.state.screenWidth - (Metrics.defaultPadding * 8);
+                    return output;
+                  }}
+                  onSelect={(index, value) => {
+                    console.log(index, value);
+                  }}
+                  onDropdownWillShow={() => {
+                    this.setState({
+                      locationPressed: true,
+                    });
+                  }}
+                  onDropdownWillHide={() => {
+                    this.setState({
+                      locationPressed: false,
+                    });
+                  }}
+                  renderRow={item => CommonWidgets.renderLocationMenuListItem(item)}
+                  options={DEMO_OPTIONS_1} />
+                <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
               </View>
             </View>
-
-          </Image>
-
+            <View style={Styles.row}>
+              <Text style={styles.contentName}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
+            </View>
+            <View style={[Styles.row, Styles.center]}>
+              <Image
+                style={styles.contentLogo}
+                resizeMode={'contain'}
+                source={logoSrc} />
+            </View>
+            <View style={Styles.row}>
+              <View style={styles.contentLine} />
+            </View>
+            <View style={[Styles.row, Styles.flex]}>
+              <WebView
+                source={{ html: description }}
+                style={styles.contentDescription} />
+            </View>
+          </View>
         </View>
       </View>
     );

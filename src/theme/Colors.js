@@ -8,19 +8,19 @@ const colors = {
   brandThird: '#1E80C7',
 
   textPrimary: '#909090',
-  textSecondary: '#989898',
-  textThird: '#6B6B6B',
-  textFourth: '#89979F',
-  textPlaceholder: '#DDDDDD',
+  textSecondary: '#6B6B6B',
+  textThird: '#DBDBDB',
+  textFourth: '#555555',
+  textPlaceholder: '#555555',
   fieldPlaceholder: '#999999',
 
   backgroundPrimary: '#0C0C0C',
   backgroundSecondary: '#1F1F1F',
-  backgroundThird: '#e1e8ee',
+  backgroundThird: '#1B1B1B',
 
-  borderPrimary: '#DDDDDD',
+  borderPrimary: '#636363',
   borderSecondary: '#E2E2E2',
-  borderThird: '#AAAAAA',
+  borderThird: '#050505',
   borderFocused: '#D0FD44',
 
   ripplePrimary: '#E22F4D50',

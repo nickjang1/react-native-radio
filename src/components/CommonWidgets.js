@@ -82,11 +82,42 @@ const CommonWidgets = {
     return (
       <TouchableOpacity
         key={item}
-        style={Styles.menuItemContainer}
+        style={Styles.dropdownItem}
       >
-        <View style={{ padding: 0, paddingBottom: 0, flexDirection: 'row', backgroundColor: 'white' }}>
-          <Icon name="map-marker" size={25} color="black" />
+        <View style={{ flex: 1, padding: 0, paddingBottom: 0, flexDirection: 'row', backgroundColor: 'white' }}>
+          <Icon name="certificate" size={25} color="black" />
           <Text style={{ padding: 5, fontSize: 15, paddingBottom: 0, color: 'black', margin: 0 }}>
+            {item}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
+  renderGenreMenuListItem(item) {
+    return (
+      <TouchableOpacity
+        key={item}
+        style={Styles.dropdownItem}
+      >
+        <View style={Styles.dropdownItemInner}>
+          <Text style={Styles.dropdownItemText}>
+            {item}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
+  renderLocationMenuListItem(item) {
+    return (
+      <TouchableOpacity
+        key={item}
+        style={Styles.dropdownItem}
+      >
+        <View style={Styles.dropdownItemInner}>
+          <Icon name="certificate" style={Styles.dropdownItemIcon} />
+          <Text style={Styles.dropdownItemText}>
             {item}
           </Text>
         </View>
