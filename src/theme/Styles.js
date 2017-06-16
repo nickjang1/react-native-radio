@@ -110,6 +110,53 @@ const Styles = {
     marginLeft: Metrics.defaultMargin,
     marginTop: 4,
   },
+  button: {
+    backgroundColor: Colors.backgroundThird,
+    borderWidth: 1,
+    borderColor: Colors.borderThird,
+    borderRadius: 2,
+    paddingTop: Metrics.defaultPadding * 0.8,
+    paddingLeft: Metrics.defaultPadding * 4,
+    paddingBottom: Metrics.defaultPadding * 0.8,
+    paddingRight: Metrics.defaultPadding * 4,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: Colors.textThird,
+  },
+  buttonIcon: {
+    fontSize: 20,
+    color: Colors.textThird,
+  },
+  slider: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    marginTop: -Metrics.defaultMargin,
+  },
+  sliderLeftIcon: {
+    color: Colors.textThird,
+    fontSize: 20,
+    marginRight: Metrics.defaultMargin,
+  },
+  sliderRightIcon: {
+    color: Colors.textThird,
+    fontSize: 20,
+    marginLeft: Metrics.defaultMargin,
+  },
+  sliderTrack: {
+    height: 2,
+    borderRadius: 2,
+  },
+  sliderThumb: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: Colors.textThird,
+  },
+  sliderThumbTouch: {
+    width: 8,
+    height: 8,
+  },
 };
 
 export default Styles;

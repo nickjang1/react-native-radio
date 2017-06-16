@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { ActivityIndicator, DeviceEventEmitter, Image, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
-import { SliderVolumeController } from 'react-native-volume-controller';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
-import VolumeSlider from 'react-native-volume-slider';
+import Slider from 'react-native-slider';
 
 import { setDetail, setPlayerStatus } from '@actions/globals';
 import { Styles, Images, Metrics, Colors } from '@theme/';
@@ -91,9 +90,10 @@ const descriptionStyles = StyleSheet.create({
 
 
 class Player extends Component {
+
   constructor(props) {
     super(props);
-    this._onPress = this._onPress.bind(this);
+    this.onPress = this.onPress.bind(this);
     const { width, height } = Dimensions.get('window');
     this.state = {
       screenWidth: width,
@@ -104,6 +104,7 @@ class Player extends Component {
       channel: 0,
       channelName: '',
       channelOptions: [],
+      volume: 1.0,
     };
   }
 
@@ -117,17 +118,8 @@ class Player extends Component {
     this.subscription = DeviceEventEmitter.addListener(
       'AudioBridgeEvent', (evt) => {
         this.props.setPlayerStatus(evt.status);
-        // console.log('event', evt);
-        // if (evt.status === Global.METADATA_UPDATED && evt.key === 'StreamTitle') {
-        //   this.setState({ song: evt.value });
-        //   console.log('state', this.state);
-        // } else if (evt.status !== Global.METADATA_UPDATED) {
-        //   this.setState(evt);
-        //   console.log('state', this.state);
-        // }
       },
     );
-
     ReactNativeAudioStreaming.getStatus((error, status) => {
       if (error) {
         return;
@@ -138,7 +130,6 @@ class Player extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.globals !== nextProps.globals) {
-      console.log('GLOBALS', this.props.globals, nextProps.globals);
       const { detail } = this.props.globals;
       const channelOptions = [];
       if (detail && detail.channels) {
@@ -162,6 +153,9 @@ class Player extends Component {
     }
   }
 
+  componentWillUnmount() {
+  }
+
   onLayout() {
     const { width, height } = Dimensions.get('window');
     this.setState({
@@ -174,7 +168,7 @@ class Player extends Component {
     this.props.navigation.goBack();
   }
 
-  _onPress() {
+  onPress() {
     switch (this.props.globals.playerStatus) {
       case Global.PLAYING:
       case Global.STREAMING:
@@ -205,8 +199,9 @@ class Player extends Component {
     }, 1000);
   }
 
-  volumeChange(value) {
-    console.log(value);
+  changeVolume(volume) {
+    console.log(volume);
+    this.setState({ volume });
   }
 
   render() {
@@ -214,29 +209,26 @@ class Player extends Component {
     switch (this.props.globals.playerStatus) {
       case Global.PLAYING:
       case Global.STREAMING:
-        playerButton = (<Image
-          style={{ width: 100, height: 35 }}
-          resizeMode={'stretch'}
-          source={Images.stop} />);
+        playerButton = (
+          <Icon style={Styles.buttonIcon} name={'pause'} />
+        );
         break;
       case Global.PAUSED:
       case Global.STOPPED:
       case Global.ERROR:
-        playerButton = (<Image
-          style={{ width: 100, height: 35 }}
-          resizeMode={'stretch'}
-          source={Images.play} />);
+        playerButton = (
+          <Icon style={Styles.buttonIcon} name={'play'} />
+        );
         break;
       case Global.BUFFERING:
       case Global.BUFFERING_START:
       case Global.START_PREPARING:
+      default:
         playerButton = (<ActivityIndicator
           animating
-          style={{ height: 35 }}
-          size="small"
-                />);
-        break;
-      default:
+          color={Colors.textThird}
+          size="small" />
+        );
         break;
     }
 
@@ -265,21 +257,21 @@ class Player extends Component {
         {/* PLAYER */}
         <View style={Styles.topContainer}>
           <View style={Styles.row}>
-            {/* <SliderVolumeController />*/}
-            <VolumeSlider
-              style={{ flex: 1 }}
-              thumbSize={{
-                width: 8,
-                height: 8,
-              }}
-              thumbTintColor="rgb(146,146,157)"
-              minimumTrackTintColor="rgb(146,146,157)"
-              maximumTrackTintColor="rgba(255,255,255, 0.1)"
-              showsRouteButton
-              onValueChange={this.volumeChange.bind(this)} />
+            <Icon style={[Styles.sliderLeftIcon]} name={'volume-off'} />
+            <Slider
+              value={this.state.volume}
+              trackStyle={Styles.sliderTrack}
+              thumbStyle={Styles.sliderThumb}
+              thumbTouchSize={Styles.sliderThumbTouch}
+              maximumTrackTintColor={Colors.textFourth}
+              minimumTrackTintColor={Colors.textThird}
+              style={Styles.slider}
+              onValueChange={this.changeVolume.bind(this)}
+            />
+            <Icon style={Styles.sliderRightIcon} name={'volume-up'} />
           </View>
           <View style={[Styles.row, Styles.center]}>
-            <TouchableOpacity onPress={this._onPress}>
+            <TouchableOpacity onPress={this.onPress} style={Styles.button}>
               {playerButton}
             </TouchableOpacity>
           </View>

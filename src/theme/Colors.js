@@ -16,7 +16,7 @@ const colors = {
 
   backgroundPrimary: '#0C0C0C',
   backgroundSecondary: '#1F1F1F',
-  backgroundThird: '#1B1B1B',
+  backgroundThird: '#242424',
 
   borderPrimary: '#636363',
   borderSecondary: '#E2E2E2',
