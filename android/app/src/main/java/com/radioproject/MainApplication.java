@@ -2,16 +2,15 @@ package com.radioproject;
 
 import android.app.Application;
 
-import com.facebook.react.ReactApplication;
-import com.ninty.system.setting.SystemSettingPackage;
-import com.tavernari.volumecontroller.ReactNativeVolumeControllerPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.i18n.reactnativei18n.ReactNativeI18n;
 import com.audioStreaming.ReactNativeAudioStreamingPackage;
+import com.facebook.react.BuildConfig;
+import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.i18n.reactnativei18n.ReactNativeI18n;
+import com.oblador.vectoricons.VectorIconsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,11 +27,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SystemSettingPackage(),
-            new ReactNativeVolumeControllerPackage(),
             new VectorIconsPackage(),
-            new ReactNativeI18n(),
-            new ReactNativeAudioStreamingPackage()
+            new ReactNativeAudioStreamingPackage(),
+            new ReactNativeI18n()
       );
     }
   };
