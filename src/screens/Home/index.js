@@ -125,7 +125,7 @@ class Home extends Component {
           style={Styles.navBarStyle}
           tintColor={Colors.brandSecondary}
           leftButton={CommonWidgets.renderNavBarLeftButton()}
-          rightButton={CommonWidgets.renderNavBarRightButton(() => this.props.navigation.goBack())} />
+          />
 
         {/* SEARCH BOX */}
         <View style={Styles.topContainer}>

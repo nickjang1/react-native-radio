@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, DeviceEventEmitter, Image, Dimensions, StyleSheet, Text, TouchableOpacity, View, WebView } from 'react-native';
+import { ActivityIndicator, DeviceEventEmitter, Image, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
 import { SliderVolumeController } from 'react-native-volume-controller';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import HTMLView from 'react-native-htmlview';
 import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
+import VolumeSlider from 'react-native-volume-slider';
 
 import { setDetail, setPlayerStatus } from '@actions/globals';
-
 import { Styles, Images, Metrics, Colors } from '@theme/';
 import CommonWidgets from '@components/CommonWidgets';
 import Api from '@api';
 import Global from '@src/global';
-
-const DEMO_OPTIONS_1 = ['option 1', 'option 2', 'option 3', 'option 4', 'option 5', 'option 6', 'option 7', 'option 8', 'option 9'];
 
 const styles = StyleSheet.create({
   topName: {
@@ -50,6 +49,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     margin: 10,
     borderRadius: 2,
+    marginBottom: Metrics.defaultMargin,
   },
   contentLine: {
     marginTop: Metrics.defaultMargin * 1.5,
@@ -60,10 +60,35 @@ const styles = StyleSheet.create({
   contentDescription: {
     backgroundColor: Colors.backgroundSecondary,
     marginTop: Metrics.defaultMargin * 1.5,
+    marginBottom: Metrics.defaultMargin * 3,
     width: '100%',
     height: '100%',
   },
+  label: {
+    marginTop: Metrics.defaultMargin / 2,
+    fontWeight: 'bold',
+    color: Colors.textPrimary,
+  },
+  text: {
+    flex: 1,
+    marginTop: Metrics.defaultMargin / 2,
+    color: Colors.textPrimary,
+  },
 });
+
+const descriptionStyles = StyleSheet.create({
+  div: {
+    color: Colors.textPrimary,
+  },
+  p: {
+    color: Colors.textPrimary,
+  },
+  strong: {
+    color: Colors.textPrimary,
+    fontWeight: 'bold',
+  },
+});
+
 
 class Player extends Component {
   constructor(props) {
@@ -76,11 +101,15 @@ class Player extends Component {
       locationPressed: false,
       status: Global.STOPPED,
       song: '',
+      channel: 0,
+      channelName: '',
+      channelOptions: [],
     };
   }
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
+    ReactNativeAudioStreaming.stop();
     this.loadingDetailData(params.id);
   }
 
@@ -107,6 +136,32 @@ class Player extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.globals !== nextProps.globals) {
+      console.log('GLOBALS', this.props.globals, nextProps.globals);
+      const { detail } = this.props.globals;
+      const channelOptions = [];
+      if (detail && detail.channels) {
+        detail.channels.forEach((channel) => {
+          const { location, frequency } = channel;
+          const channelOption = `${location} ${frequency}`;
+          channelOptions.push(channelOption);
+        });
+      }
+
+      let channel = this.state.channel;
+      if (channel > channelOptions.length) {
+        channel = channelOptions.length - 1;
+      }
+      const channelName = channelOptions.length > channel ? channelOptions[channel] : '';
+      this.setState({
+        channelOptions,
+        channel,
+        channelName,
+      });
+    }
+  }
+
   onLayout() {
     const { width, height } = Dimensions.get('window');
     this.setState({
@@ -131,7 +186,7 @@ class Player extends Component {
       case Global.STOPPED:
       case Global.ERROR:
         ReactNativeAudioStreaming.play(this.props.globals.detail === null ? ''
-        : this.props.globals.detail.channels[0].stream.url,
+        : this.props.globals.detail.channels[this.state.channel].stream.url,
          { showIniOSMediaCenter: true, showInAndroidNotifications: true });
         break;
       case Global.BUFFERING:
@@ -145,7 +200,9 @@ class Player extends Component {
   async loadingDetailData(id) {
     const detail = await Api.getDetail(id);
     this.props.setDetail(detail);
-    ReactNativeAudioStreaming.play(detail.channels[0].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
+    setTimeout(() => {
+      ReactNativeAudioStreaming.play(detail.channels[this.state.channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
+    }, 1000);
   }
 
   volumeChange(value) {
@@ -185,7 +242,8 @@ class Player extends Component {
 
     const logoSrc = this.props.globals.detail === null ? { src: '' } : { uri: this.props.globals.detail.logo };
     let description = this.props.globals.detail === null ? '' : this.props.globals.detail.description;
-    description = `<style>body, html {font-family: 'Helvetica'; font-size: 14px; background-color: ${Colors.backgroundSecondary}; color: ${Colors.textPrimary};}</style><body>${description}</body>`;
+    description = description.replace(/\r?\n|\r/g, '');
+    description = `<div>${description}</div>`;
 
     return (
       <View style={Styles.container} >
@@ -207,7 +265,18 @@ class Player extends Component {
         {/* PLAYER */}
         <View style={Styles.topContainer}>
           <View style={Styles.row}>
-            <SliderVolumeController />
+            {/* <SliderVolumeController />*/}
+            <VolumeSlider
+              style={{ flex: 1 }}
+              thumbSize={{
+                width: 8,
+                height: 8,
+              }}
+              thumbTintColor="rgb(146,146,157)"
+              minimumTrackTintColor="rgb(146,146,157)"
+              maximumTrackTintColor="rgba(255,255,255, 0.1)"
+              showsRouteButton
+              onValueChange={this.volumeChange.bind(this)} />
           </View>
           <View style={[Styles.row, Styles.center]}>
             <TouchableOpacity onPress={this._onPress}>
@@ -221,7 +290,7 @@ class Player extends Component {
 
         {/* CONTENT */}
         <View style={Styles.contentContainer}>
-          <View style={styles.content}>
+          <ScrollView style={styles.content}>
             <View style={Styles.row}>
               <Text style={styles.contentLocationLabel}>Ellge Localldad</Text>
             </View>
@@ -229,17 +298,24 @@ class Player extends Component {
               <View style={[Styles.dropdownContainer, styles.contentLocation]}>
                 <ModalDropdown
                   style={Styles.dropdown}
+                  defaultValue={this.state.channelName}
                   dropdownStyle={Styles.dropdownBox}
                   textStyle={Styles.dropdownText}
                   showsVerticalScrollIndicator
-                  defaultValue={'Select Locations'}
                   adjustFrame={(style) => {
                     const output = style;
                     output.width = this.state.screenWidth - (Metrics.defaultPadding * 8);
+                    output.height = this.state.channelOptions.length * 34.5;
                     return output;
                   }}
-                  onSelect={(index, value) => {
-                    console.log(index, value);
+                  onSelect={(channel, channelName) => {
+                    ReactNativeAudioStreaming.pause();
+                    ReactNativeAudioStreaming.stop();
+                    setTimeout(() => {
+                      ReactNativeAudioStreaming.play(this.props.globals.detail.channels[channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
+                      ReactNativeAudioStreaming.resume();
+                    }, 1000);
+                    this.setState({ channel, channelName });
                   }}
                   onDropdownWillShow={() => {
                     this.setState({
@@ -252,7 +328,7 @@ class Player extends Component {
                     });
                   }}
                   renderRow={item => CommonWidgets.renderLocationMenuListItem(item)}
-                  options={DEMO_OPTIONS_1} />
+                  options={this.state.channelOptions} />
                 <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
               </View>
             </View>
@@ -265,15 +341,38 @@ class Player extends Component {
                 resizeMode={'contain'}
                 source={logoSrc} />
             </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Frecuencia: </Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.channels[this.state.channel].frequency}</Text>
+            </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Localidad: </Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.channels[this.state.channel].location}</Text>
+            </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Teléfono:</Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.phone}</Text>
+            </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Género: </Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.genre}</Text>
+            </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Dirección: </Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.address}</Text>
+            </View>
+            <View style={[Styles.row]}>
+              <Text style={styles.label}>Web: </Text>
+              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.website}</Text>
+            </View>
+
             <View style={Styles.row}>
               <View style={styles.contentLine} />
             </View>
             <View style={[Styles.row, Styles.flex]}>
-              <WebView
-                source={{ html: description }}
-                style={styles.contentDescription} />
+              <HTMLView value={description} stylesheet={descriptionStyles} style={styles.contentDescription} />
             </View>
-          </View>
+          </ScrollView>
         </View>
       </View>
     );
