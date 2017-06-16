@@ -78,6 +78,16 @@ const CommonWidgets = {
     );
   },
 
+  renderNavRightButtonHome(onPress) {
+    return (
+      <TouchableOpacity
+        style={styles.navbarRightSearch}
+        onPress={onPress} >
+        <Icon name="home" style={styles.navBarRightSearchIcon} />
+      </TouchableOpacity>
+    );
+  },
+
   renderMenuListItem(item) {
     return (
       <TouchableOpacity

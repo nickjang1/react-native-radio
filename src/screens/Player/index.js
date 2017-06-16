@@ -251,7 +251,7 @@ class Player extends Component {
           statusBar={{ style: 'light-content' }}
           style={Styles.navBarStyle}
           tintColor={Colors.brandSecondary}
-          rightButton={CommonWidgets.renderNavBarRightButtonSearch(() => this.props.navigation.goBack())}
+          rightButton={CommonWidgets.renderNavRightButtonHome(() => this.props.navigation.goBack())}
           leftButton={CommonWidgets.renderNavBarLeftButton()} />
 
         {/* PLAYER */}
