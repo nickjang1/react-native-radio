@@ -29,6 +29,7 @@ const Styles = {
     flexDirection: 'column',
     backgroundColor: Colors.backgroundSecondary,
   },
+
   background: {
     position: 'absolute',
     left: 0,
@@ -51,6 +52,8 @@ const Styles = {
     flex: 1,
     padding: Metrics.defaultPadding * 2,
   },
+
+  // Dropdown Styles
   dropdownContainer: {
     position: 'relative',
   },
@@ -77,6 +80,7 @@ const Styles = {
     width: '100%',
     height: '100%',
     padding: Metrics.defaultPadding,
+    paddingRight: Metrics.defaultMargin * 2,
     fontSize: 14,
   },
   dropdownBox: {
@@ -99,9 +103,23 @@ const Styles = {
     paddingTop: Metrics.defaultPadding * 0.6,
     paddingBottom: Metrics.defaultPadding * 0.6,
   },
+  dropdownItemInnerHighlight: {
+    backgroundColor: Colors.backgroundThird,
+    flex: 1,
+    flexDirection: 'row',
+    paddingLeft: Metrics.defaultPadding * 2,
+    paddingRight: Metrics.defaultPadding * 2,
+    paddingTop: Metrics.defaultPadding * 0.6,
+    paddingBottom: Metrics.defaultPadding * 0.6,
+  },
   dropdownItemIcon: {
     fontSize: 14,
     color: Colors.backgroundPrimary,
+    marginTop: 6,
+  },
+  dropdownItemIconHighlight: {
+    fontSize: 14,
+    color: Colors.textThird,
     marginTop: 6,
   },
   dropdownItemText: {
@@ -110,6 +128,14 @@ const Styles = {
     marginLeft: Metrics.defaultMargin,
     marginTop: 4,
   },
+  dropdownItemTextHighlight: {
+    fontSize: 14,
+    color: Colors.textThird,
+    marginLeft: Metrics.defaultMargin,
+    marginTop: 4,
+  },
+
+  // Button Styles
   button: {
     backgroundColor: Colors.backgroundThird,
     borderWidth: 1,
@@ -128,6 +154,8 @@ const Styles = {
     fontSize: 20,
     color: Colors.textThird,
   },
+
+  // Slider Styles
   slider: {
     backgroundColor: 'transparent',
     flex: 1,

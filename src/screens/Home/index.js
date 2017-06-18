@@ -59,6 +59,8 @@ class Home extends Component {
       locationPressed: false,
       genrePressed: false,
     };
+    this.locationIndex = 0;
+    this.genreIndex = 0;
   }
 
   onLayout() {
@@ -86,16 +88,30 @@ class Home extends Component {
   handleRefresh() {
   }
 
-  async searchName() {
-    const radios = await Api.getNameSearch(this.state.searchKeyword);
-    this.props.setRadios(radios);
+  searchName() {
+    this.search();
   }
-  async searchLocation(index) {
-    const radios = await Api.getLocationSearch(this.props.globals.locations[index]);
-    this.props.setRadios(radios);
+
+  searchLocation(locationIndex) {
+    this.locationIndex = parseInt(locationIndex, 0);
+    this.search();
   }
-  async searchGenre(index) {
-    const radios = await Api.getGenreSearch(this.props.globals.genres[index]);
+
+  searchGenre(genreIndex) {
+    this.genreIndex = parseInt(genreIndex, 0);
+    this.search();
+  }
+
+  search() {
+    const name = this.state.searchKeyword;
+    const location = this.locationIndex === 0 ? '' : this.props.globals.locations[this.locationIndex];
+    const genreId = this.genreIndex === 0 ? '' : this.props.globals.genreIds[this.genreIndex];
+    this._search(name, location, genreId);
+  }
+
+  async _search(name: '', location: '', genreId: '') {
+    console.log('SEARCH', name, location, genreId);
+    const radios = await Api.getSearch(name, location, genreId);
     this.props.setRadios(radios);
   }
 
@@ -151,7 +167,8 @@ class Home extends Component {
                 dropdownStyle={Styles.dropdownBox}
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
-                defaultValue={'Select Location'}
+                defaultValue={'Selecto Localidad'}
+                defaultIndex={0}
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 4));
@@ -168,7 +185,7 @@ class Home extends Component {
                     locationPressed: false,
                   });
                 }}
-                renderRow={item => CommonWidgets.renderLocationMenuListItem(item)}
+                renderRow={(item, index, highlight) => CommonWidgets.renderLocationMenuListItem(item, index, highlight)}
                 options={this.props.globals.locations} />
               <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
             </View>
@@ -178,7 +195,8 @@ class Home extends Component {
                 dropdownStyle={Styles.dropdownBox}
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
-                defaultValue={'Select Genre'}
+                defaultValue={'Selecto Género'}
+                defaultIndex={0}
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 6)) / 2;
@@ -195,7 +213,7 @@ class Home extends Component {
                     genrePressed: false,
                   });
                 }}
-                renderRow={item => CommonWidgets.renderGenreMenuListItem(item)}
+                renderRow={(item, index, highlight) => CommonWidgets.renderGenreMenuListItem(item, index, highlight)}
                 options={this.props.globals.genres} />
               <Icon name={this.state.genrePressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
             </View>

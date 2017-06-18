@@ -105,6 +105,7 @@ class Player extends Component {
       channelName: '',
       channelOptions: [],
       volume: 1.0,
+      isLoading: true,
     };
   }
 
@@ -307,7 +308,7 @@ class Player extends Component {
                       ReactNativeAudioStreaming.play(this.props.globals.detail.channels[channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
                       ReactNativeAudioStreaming.resume();
                     }, 1000);
-                    this.setState({ channel, channelName });
+                    this.setState({ channel: parseInt(channel, 0), channelName });
                   }}
                   onDropdownWillShow={() => {
                     this.setState({
@@ -319,7 +320,7 @@ class Player extends Component {
                       locationPressed: false,
                     });
                   }}
-                  renderRow={item => CommonWidgets.renderLocationMenuListItem(item)}
+                  renderRow={(item, index, highlight) => CommonWidgets.renderChannelMenuListItem(item, index, highlight)}
                   options={this.state.channelOptions} />
                 <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
               </View>

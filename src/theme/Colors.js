@@ -22,14 +22,6 @@ const colors = {
   borderSecondary: '#E2E2E2',
   borderThird: '#050505',
   borderFocused: '#D0FD44',
-
-  ripplePrimary: '#E22F4D50',
-  rippleSecondary: '#27C87D50',
-  rippleThird: '#1E80C750',
-
-  alphaPrimary: '#F0F3EA90',
-  golden: '#FFAA00',
-  greycolor: '#AAAAAA',
 };
 
 export default colors;

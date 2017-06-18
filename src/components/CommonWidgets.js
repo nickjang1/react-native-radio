@@ -5,12 +5,7 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
-  TouchableHighlight,
   Image,
-  ScrollView,
-  Animated,
-  ActivityIndicator,
-  Linking,
   Alert } from 'react-native';
 
 import I18n from 'react-native-i18n';
@@ -104,7 +99,21 @@ const CommonWidgets = {
     );
   },
 
-  renderGenreMenuListItem(item) {
+  renderGenreMenuListItem(item, index, highlight) {
+    if (highlight) {
+      return (
+        <TouchableOpacity
+          key={item}
+          style={Styles.dropdownItem}
+          >
+          <View style={Styles.dropdownItemInnerHighlight}>
+            <Text style={Styles.dropdownItemTextHighlight}>
+              {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
     return (
       <TouchableOpacity
         key={item}
@@ -119,14 +128,60 @@ const CommonWidgets = {
     );
   },
 
-  renderLocationMenuListItem(item) {
+  renderLocationMenuListItem(item, index, highlight) {
+    if (highlight) {
+      return (
+        <TouchableOpacity
+          key={item}
+          style={Styles.dropdownItem}
+          >
+          <View style={Styles.dropdownItemInnerHighlight}>
+            <Icon name="location-arrow" style={Styles.dropdownItemIconHighlight} />
+            <Text style={Styles.dropdownItemTextHighlight}>
+              {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
     return (
       <TouchableOpacity
         key={item}
         style={Styles.dropdownItem}
       >
         <View style={Styles.dropdownItemInner}>
-          <Icon name="certificate" style={Styles.dropdownItemIcon} />
+          <Icon name="location-arrow" style={Styles.dropdownItemIcon} />
+          <Text style={Styles.dropdownItemText}>
+            {item}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
+  renderChannelMenuListItem(item, index, highlight) {
+    if (highlight) {
+      return (
+        <TouchableOpacity
+          key={item}
+          style={Styles.dropdownItem}
+          >
+          <View style={Styles.dropdownItemInnerHighlight}>
+            <Icon name="circle" style={Styles.dropdownItemIconHighlight} />
+            <Text style={Styles.dropdownItemTextHighlight}>
+              {item}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        key={item}
+        style={Styles.dropdownItem}
+        >
+        <View style={Styles.dropdownItemInner}>
+          <Icon name="circle" style={Styles.dropdownItemIcon} />
           <Text style={Styles.dropdownItemText}>
             {item}
           </Text>

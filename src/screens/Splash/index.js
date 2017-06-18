@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Styles, Images, Metrics, Colors } from '@theme/';
 
 import CommonWidgets from '@components/CommonWidgets';
-import { setRadios, setLocations, setGenres } from '@actions/globals';
+import { setRadios, setLocations, setGenres, setGenreIds } from '@actions/globals';
 import Api from '@api';
 
 import Utils from '@src/utils';
@@ -32,14 +32,14 @@ class Splash extends Component {
   async loadingData() {
     const topics = await Api.getInfo();
     const newGenres = topics.genres.map(item => item.name);
-    // console.log(newGenres);
-    this.props.setGenres(newGenres);
-    this.props.setLocations(topics.locations);
-    // console.log('topics', topics);
-    const radios = await Api.getNameSearch('d');
+    const newGenreIds = topics.genres.map(item => item.id);
+
+    this.props.setGenres(['Selecto Género', ...newGenres]);
+    this.props.setLocations(['Selecto Localidad', ...topics.locations]);
+    this.props.setGenreIds(['', ...newGenreIds]);
+    const radios = await Api.getSearch();
     this.props.setRadios(radios);
     this.gotoNext();
-    // console.log('result', topics);
   }
 
   gotoNext() {
@@ -67,6 +67,7 @@ function mapDispatchToProps(dispatch) {
     setRadios: radios => dispatch(setRadios(radios)),
     setLocations: locations => dispatch(setLocations(locations)),
     setGenres: genres => dispatch(setGenres(genres)),
+    setGenreIds: genreIds => dispatch(setGenreIds(genreIds)),
   };
 }
 function mapStateToProps(state) {

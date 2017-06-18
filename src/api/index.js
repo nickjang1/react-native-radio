@@ -32,6 +32,37 @@ const Api = {
       return ret;
     } catch (error) { console.log(error); return null; }
   },
+
+  async getSearch(name = '', location = '', genreId = '', page = 1) {
+    try {
+      let url = `${CONFIG.SERVER}search`;
+      let isFirst = true;
+
+      if (name) {
+        url = `${url}?name=${name}`;
+        isFirst = false;
+      }
+
+      if (location) {
+        url = isFirst ? `${url}?location=${location}` : `${url}&location=${location}`;
+        isFirst = false;
+      }
+
+      if (genreId) {
+        url = isFirst ? `${url}?genre_id=${genreId}` : `${url}&genre_id=${genreId}`;
+        isFirst = false;
+      }
+
+      if (page !== 1) {
+        url = isFirst ? `${url}?page=${page}` : `${url}&page=${page}`;
+        isFirst = false;
+      }
+
+      const res = await fetch(url);
+      const ret = await this.checkStatus(res.json());
+      return ret;
+    } catch (error) { console.log(error); return null; }
+  },
   async getDetail(id) {
     try {
       const res = await fetch(`${CONFIG.SERVER}${id}`);
