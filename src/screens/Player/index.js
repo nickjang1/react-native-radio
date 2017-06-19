@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import { ReactNativeAudioStreaming } from 'react-native-audio-streaming';
 import Slider from 'react-native-slider';
+import SystemSetting from 'react-native-system-setting';
 
 import { setDetail, setPlayerStatus } from '@actions/globals';
 import { Styles, Images, Metrics, Colors } from '@theme/';
@@ -105,8 +106,9 @@ class Player extends Component {
       channelName: '',
       channelOptions: [],
       volume: 1.0,
-      isLoading: true,
+      isLoaded: false,
     };
+    this.volumeListener = null;
   }
 
   componentWillMount() {
@@ -127,34 +129,16 @@ class Player extends Component {
       }
       this.props.setPlayerStatus(status);
     });
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.globals !== nextProps.globals) {
-      const { detail } = this.props.globals;
-      const channelOptions = [];
-      if (detail && detail.channels) {
-        detail.channels.forEach((channel) => {
-          const { location, frequency } = channel;
-          const channelOption = `${location} ${frequency}`;
-          channelOptions.push(channelOption);
-        });
-      }
-
-      let channel = this.state.channel;
-      if (channel > channelOptions.length) {
-        channel = channelOptions.length - 1;
-      }
-      const channelName = channelOptions.length > channel ? channelOptions[channel] : '';
-      this.setState({
-        channelOptions,
-        channel,
-        channelName,
-      });
-    }
+    const volumeListener = SystemSetting.addVolumeListener((data) => {
+      const volume = data.value;
+      this.state.setVolume({ volume });
+    });
+    this.volumeListener = volumeListener;
   }
 
   componentWillUnmount() {
+    SystemSetting.removeVolumeListener(this.volumeListener);
   }
 
   onLayout() {
@@ -193,16 +177,38 @@ class Player extends Component {
   }
 
   async loadingDetailData(id) {
+    this.setState({ isLoaded: false });
     const detail = await Api.getDetail(id);
     this.props.setDetail(detail);
+
     setTimeout(() => {
       ReactNativeAudioStreaming.play(detail.channels[this.state.channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
-    }, 1000);
+      const channelOptions = [];
+      if (detail && detail.channels) {
+        detail.channels.forEach((channel) => {
+          const { location, frequency } = channel;
+          const channelOption = `${location} ${frequency}`;
+          channelOptions.push(channelOption);
+        });
+      }
+
+      let channel = this.state.channel;
+      if (channel > channelOptions.length) {
+        channel = channelOptions.length - 1;
+      }
+      const channelName = channelOptions.length > channel ? channelOptions[channel] : '';
+      this.setState({
+        channelOptions,
+        channel,
+        channelName,
+        isLoaded: true,
+      });
+    }, 500);
   }
 
   changeVolume(volume) {
-    console.log(volume);
-    this.setState({ volume });
+    // this.setState({ volume });
+    SystemSetting.setVolume(volume);
   }
 
   render() {
@@ -237,6 +243,16 @@ class Player extends Component {
     let description = this.props.globals.detail === null ? '' : this.props.globals.detail.description;
     description = description.replace(/\r?\n|\r/g, '');
     description = `<div>${description}</div>`;
+
+    if (!this.state.isLoaded || !this.state.channelName) {
+      return (
+        <View style={Styles.container}>
+          <View style={[Styles.flex, Styles.center, Styles.horzCenter]}>
+            <ActivityIndicator size={'small'} color={Colors.textPrimary} />
+          </View>
+        </View>
+      );
+    }
 
     return (
       <View style={Styles.container} >
@@ -292,6 +308,7 @@ class Player extends Component {
                 <ModalDropdown
                   style={Styles.dropdown}
                   defaultValue={this.state.channelName}
+                  defaultIndex={this.state.channel}
                   dropdownStyle={Styles.dropdownBox}
                   textStyle={Styles.dropdownText}
                   showsVerticalScrollIndicator
