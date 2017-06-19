@@ -108,7 +108,6 @@ class Player extends Component {
       volume: 1.0,
       isLoaded: false,
     };
-    this.volumeListener = null;
   }
 
   componentWillMount() {
@@ -129,16 +128,9 @@ class Player extends Component {
       }
       this.props.setPlayerStatus(status);
     });
-
-    const volumeListener = SystemSetting.addVolumeListener((data) => {
-      const volume = data.value;
-      this.state.setVolume({ volume });
-    });
-    this.volumeListener = volumeListener;
   }
 
   componentWillUnmount() {
-    SystemSetting.removeVolumeListener(this.volumeListener);
   }
 
   onLayout() {
@@ -182,6 +174,7 @@ class Player extends Component {
     this.props.setDetail(detail);
 
     setTimeout(() => {
+      // SystemSetting.setVolume(this.state.volume);
       ReactNativeAudioStreaming.play(detail.channels[this.state.channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
       const channelOptions = [];
       if (detail && detail.channels) {
