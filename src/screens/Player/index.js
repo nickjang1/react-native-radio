@@ -307,11 +307,12 @@ class Player extends Component {
         {/* CONTENT */}
         <View style={Styles.contentContainer}>
           <ScrollView style={styles.content}>
-            <View style={Styles.row}>
-              <Text style={styles.contentLocationLabel}>Localldad</Text>
-            </View>
-            <View style={Styles.row}>
-              {this.state.channelOptions.length > 1 ? (
+            {this.state.channelOptions.length > 1 ? (
+              <View style={Styles.row}>
+                <Text style={styles.contentLocationLabel}>Localidad</Text>
+              </View>) : null }
+            {this.state.channelOptions.length > 1 ? (
+              <View style={Styles.row}>
                 <View style={[Styles.dropdownContainer, styles.contentLocation]}>
                   <ModalDropdown
                     style={Styles.dropdown}
@@ -349,12 +350,10 @@ class Player extends Component {
                     options={this.state.channelOptions} />
                   <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
                 </View>
-              ) : (
-                <View style={[Styles.dropdownContainer, styles.contentLocation]}>
-                  <Text style={[Styles.dropdown, Styles.dropdownBox, Styles.dropdownText]}>{this.state.channelName}</Text>
-                </View>
-              )}
-            </View>
+              </View>
+            ) : (
+              null
+            )}
             <View style={Styles.row}>
               <Text style={styles.contentName}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
             </View>

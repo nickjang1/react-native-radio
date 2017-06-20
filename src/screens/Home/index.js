@@ -150,7 +150,7 @@ class Home extends Component {
               underlineColorAndroid={'transparent'}
               placeholderTextColor={Colors.textPlaceholder}
               style={styles.searchTextInput}
-              placeholder={'Buska Emisora...'}
+              placeholder={'Buscar Emisora...'}
               onChangeText={this.onSearchKeywordInputChange.bind(this)}
               onSubmitEditing={() => this.searchName()} />
             <TouchableOpacity onPress={() => this.searchName()} style={styles.searchButton}>
