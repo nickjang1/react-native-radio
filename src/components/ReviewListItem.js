@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
   listItemName: {
     marginBottom: 5,
     fontSize: 15,
-    color: Colors.textPrimary,
+    color: Colors.textThird,
   },
   row: {
     flexDirection: 'row',
-    flex: 1,
+    // flex: 1,
   },
   listItemLabel: {
     flex: 2,
@@ -77,6 +77,7 @@ export default class RadioListItem extends Component {
   }
 
   render() {
+    console.log(this.props.item);
     return (
       <TouchableHighlight
         key={this.props.item.id}
@@ -110,14 +111,16 @@ export default class RadioListItem extends Component {
                 {this.props.item.location}
               </Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.listItemLabel}>
-                Telefono
-              </Text>
-              <Text style={styles.listItemValue}>
-                809-565-4567
-              </Text>
-            </View>
+            {this.props.item.genres ? (
+              <View style={styles.row}>
+                <Text style={styles.listItemLabel}>
+                  Géneros
+                </Text>
+                <Text style={styles.listItemValue}>
+                  {this.props.item.genres}
+                </Text>
+              </View>
+            ) : null}
           </View>
         </View>
       </TouchableHighlight>

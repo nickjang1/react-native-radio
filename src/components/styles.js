@@ -3,9 +3,9 @@ import { Styles, Fonts, Colors, Metrics } from '@theme/';
 
 export default StyleSheet.create({
   navBarLeft: {
-    width: Metrics.screenWidth * 0.7,
+    width: Metrics.screenWidth * 0.75,
     height: 40,
-    tintColor: Colors.textPrimary,
+    tintColor: Colors.textThird,
   },
   navBarRightClose: {
     paddingBottom: 0,

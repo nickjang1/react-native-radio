@@ -83,22 +83,6 @@ const CommonWidgets = {
     );
   },
 
-  renderMenuListItem(item) {
-    return (
-      <TouchableOpacity
-        key={item}
-        style={Styles.dropdownItem}
-      >
-        <View style={{ flex: 1, padding: 0, paddingBottom: 0, flexDirection: 'row', backgroundColor: 'white' }}>
-          <Icon name="certificate" size={25} color="black" />
-          <Text style={{ padding: 5, fontSize: 15, paddingBottom: 0, color: 'black', margin: 0 }}>
-            {item}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  },
-
   renderGenreMenuListItem(item, index, highlight) {
     if (highlight) {
       return (

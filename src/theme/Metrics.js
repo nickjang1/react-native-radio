@@ -32,6 +32,7 @@ const metrics = {
   tabBarIconSize: sWidth * 0.064,
 
   statusBarHeight: 20,
+  dropdownItemHeight: 35,
 
 };
 

@@ -227,7 +227,7 @@ class Player extends Component {
         playerButton = (<ActivityIndicator
           animating
           color={Colors.textThird}
-          size="small" />
+          size={'small'} />
         );
         break;
     }
@@ -239,7 +239,21 @@ class Player extends Component {
 
     if (!this.state.isLoaded || !this.state.channelName) {
       return (
-        <View style={Styles.container}>
+        <View style={Styles.container} >
+          <Image
+            style={Styles.background}
+            resizeMode={'cover'}
+            source={Images.background} />
+
+          {CommonWidgets.renderStatusBar(Colors.headerColor)}
+
+          {/* NAVIGATION */}
+          <NavigationBar
+            statusBar={{ style: 'light-content' }}
+            style={Styles.navBarStyle}
+            tintColor={Colors.brandSecondary}
+            // rightButton={CommonWidgets.renderNavRightButtonHome(() => this.props.navigation.goBack())}
+            leftButton={CommonWidgets.renderNavBarLeftButton()} />
           <View style={[Styles.flex, Styles.center, Styles.horzCenter]}>
             <ActivityIndicator size={'small'} color={Colors.textPrimary} />
           </View>
@@ -294,46 +308,52 @@ class Player extends Component {
         <View style={Styles.contentContainer}>
           <ScrollView style={styles.content}>
             <View style={Styles.row}>
-              <Text style={styles.contentLocationLabel}>Ellge Localldad</Text>
+              <Text style={styles.contentLocationLabel}>Localldad</Text>
             </View>
             <View style={Styles.row}>
-              <View style={[Styles.dropdownContainer, styles.contentLocation]}>
-                <ModalDropdown
-                  style={Styles.dropdown}
-                  defaultValue={this.state.channelName}
-                  defaultIndex={this.state.channel}
-                  dropdownStyle={Styles.dropdownBox}
-                  textStyle={Styles.dropdownText}
-                  showsVerticalScrollIndicator
-                  adjustFrame={(style) => {
-                    const output = style;
-                    output.width = this.state.screenWidth - (Metrics.defaultPadding * 8);
-                    output.height = this.state.channelOptions.length * 34.5;
-                    return output;
-                  }}
-                  onSelect={(channel, channelName) => {
-                    ReactNativeAudioStreaming.pause();
-                    ReactNativeAudioStreaming.stop();
-                    setTimeout(() => {
-                      ReactNativeAudioStreaming.play(this.props.globals.detail.channels[channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
-                      ReactNativeAudioStreaming.resume();
-                    }, 1000);
-                    this.setState({ channel: parseInt(channel, 0), channelName });
-                  }}
-                  onDropdownWillShow={() => {
-                    this.setState({
-                      locationPressed: true,
-                    });
-                  }}
-                  onDropdownWillHide={() => {
-                    this.setState({
-                      locationPressed: false,
-                    });
-                  }}
-                  renderRow={(item, index, highlight) => CommonWidgets.renderChannelMenuListItem(item, index, highlight)}
-                  options={this.state.channelOptions} />
-                <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
-              </View>
+              {this.state.channelOptions.length > 1 ? (
+                <View style={[Styles.dropdownContainer, styles.contentLocation]}>
+                  <ModalDropdown
+                    style={Styles.dropdown}
+                    defaultValue={this.state.channelName}
+                    defaultIndex={this.state.channel}
+                    dropdownStyle={Styles.dropdownBox}
+                    textStyle={Styles.dropdownText}
+                    showsVerticalScrollIndicator
+                    adjustFrame={(style) => {
+                      const output = style;
+                      output.width = this.state.screenWidth - (Metrics.defaultPadding * 8);
+                      output.height = this.state.channelOptions.length * 34.5;
+                      return output;
+                    }}
+                    onSelect={(channel, channelName) => {
+                      ReactNativeAudioStreaming.pause();
+                      ReactNativeAudioStreaming.stop();
+                      setTimeout(() => {
+                        ReactNativeAudioStreaming.play(this.props.globals.detail.channels[channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
+                        ReactNativeAudioStreaming.resume();
+                      }, 1000);
+                      this.setState({ channel: parseInt(channel, 0), channelName });
+                    }}
+                    onDropdownWillShow={() => {
+                      this.setState({
+                        locationPressed: true,
+                      });
+                    }}
+                    onDropdownWillHide={() => {
+                      this.setState({
+                        locationPressed: false,
+                      });
+                    }}
+                    renderRow={(item, index, highlight) => CommonWidgets.renderChannelMenuListItem(item, index, highlight)}
+                    options={this.state.channelOptions} />
+                  <Icon name={this.state.locationPressed ? 'caret-up' : 'caret-down'} style={Styles.dropdownIcon} />
+                </View>
+              ) : (
+                <View style={[Styles.dropdownContainer, styles.contentLocation]}>
+                  <Text style={[Styles.dropdown, Styles.dropdownBox, Styles.dropdownText]}>{this.state.channelName}</Text>
+                </View>
+              )}
             </View>
             <View style={Styles.row}>
               <Text style={styles.contentName}>{this.props.globals.detail === null ? '' : this.props.globals.detail.name}</Text>
@@ -346,29 +366,32 @@ class Player extends Component {
             </View>
             <View style={[Styles.row]}>
               <Text style={styles.label}>Frecuencia: </Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.channels[this.state.channel].frequency}</Text>
+              <Text style={styles.text}>{this.props.globals.detail.channels[this.state.channel].frequency}</Text>
             </View>
             <View style={[Styles.row]}>
               <Text style={styles.label}>Localidad: </Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.channels[this.state.channel].location}</Text>
+              <Text style={styles.text}>{this.props.globals.detail.channels[this.state.channel].location}</Text>
             </View>
-            <View style={[Styles.row]}>
-              <Text style={styles.label}>Teléfono:</Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.phone}</Text>
-            </View>
-            <View style={[Styles.row]}>
-              <Text style={styles.label}>Género: </Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.genre}</Text>
-            </View>
-            <View style={[Styles.row]}>
-              <Text style={styles.label}>Dirección: </Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.address}</Text>
-            </View>
-            <View style={[Styles.row]}>
-              <Text style={styles.label}>Web: </Text>
-              <Text style={styles.text}>{this.props.globals.detail === null ? '' : this.props.globals.detail.website}</Text>
-            </View>
-
+            { this.props.globals.detail.phone ?
+              (<View style={[Styles.row]}>
+                <Text style={styles.label}>Teléfono:</Text>
+                <Text style={styles.text}>{this.props.globals.detail.phone}</Text>
+              </View>) : null }
+            { this.props.globals.detail.genre ?
+              (<View style={[Styles.row]}>
+                <Text style={styles.label}>Género: </Text>
+                <Text style={styles.text}>{this.props.globals.detail.genre}</Text>
+              </View>) : null }
+            { this.props.globals.detail.address ?
+              (<View style={[Styles.row]}>
+                <Text style={styles.label}>Dirección: </Text>
+                <Text style={styles.text}>{this.props.globals.detail.address}</Text>
+              </View>) : null }
+            { this.props.globals.detail.website ?
+              (<View style={[Styles.row]}>
+                <Text style={styles.label}>Web: </Text>
+                <Text style={styles.text}>{this.props.globals.detail.website}</Text>
+              </View>) : null }
             <View style={Styles.row}>
               <View style={styles.contentLine} />
             </View>

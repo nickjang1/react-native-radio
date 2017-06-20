@@ -150,7 +150,7 @@ class Home extends Component {
               underlineColorAndroid={'transparent'}
               placeholderTextColor={Colors.textPlaceholder}
               style={styles.searchTextInput}
-              placeholder={'Type Here...'}
+              placeholder={'Buska Emisora...'}
               onChangeText={this.onSearchKeywordInputChange.bind(this)}
               onSubmitEditing={() => this.searchName()} />
             <TouchableOpacity onPress={() => this.searchName()} style={styles.searchButton}>
@@ -172,6 +172,10 @@ class Home extends Component {
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 4));
+                  output.height = this.props.globals.locations.length * (Metrics.dropdownItemHeight + 1);
+                  if (output.height > (this.state.screenHeight - 220)) {
+                    output.height = parseInt((this.state.screenHeight - 220) / (Metrics.dropdownItemHeight + 1), 0) * (Metrics.dropdownItemHeight + 1);
+                  }
                   return output;
                 }}
                 onSelect={item => this.searchLocation(item)}
@@ -200,6 +204,10 @@ class Home extends Component {
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 6)) / 2;
+                  output.height = this.props.globals.genres.length * (Metrics.dropdownItemHeight + 1);
+                  if (output.height > (this.state.screenHeight - 220)) {
+                    output.height = parseInt((this.state.screenHeight - 220) / (Metrics.dropdownItemHeight + 1), 0) * (Metrics.dropdownItemHeight + 1);
+                  }
                   return output;
                 }}
                 onSelect={item => this.searchGenre(item)}
