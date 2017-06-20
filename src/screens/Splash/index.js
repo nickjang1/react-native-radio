@@ -34,8 +34,8 @@ class Splash extends Component {
     const newGenres = topics.genres.map(item => item.name);
     const newGenreIds = topics.genres.map(item => item.id);
 
-    this.props.setGenres(['Selecto Género', ...newGenres]);
-    this.props.setLocations(['Selecto Localidad', ...topics.locations]);
+    this.props.setGenres(['Género', ...newGenres]);
+    this.props.setLocations(['Localidad', ...topics.locations]);
     this.props.setGenreIds(['', ...newGenreIds]);
     const radios = await Api.getSearch();
     this.props.setRadios(radios);

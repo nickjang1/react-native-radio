@@ -167,7 +167,7 @@ class Home extends Component {
                 dropdownStyle={Styles.dropdownBox}
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
-                defaultValue={'Selecto Localidad'}
+                defaultValue={'Localidad'}
                 defaultIndex={0}
                 adjustFrame={(style) => {
                   const output = style;
@@ -195,7 +195,7 @@ class Home extends Component {
                 dropdownStyle={Styles.dropdownBox}
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
-                defaultValue={'Selecto Género'}
+                defaultValue={'Género'}
                 defaultIndex={0}
                 adjustFrame={(style) => {
                   const output = style;
