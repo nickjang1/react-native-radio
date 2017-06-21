@@ -416,7 +416,7 @@ class Player extends Component {
             </View>
             { this.props.globals.detail.phone ?
               (<View style={[Styles.row]}>
-                <Text style={styles.label}>Teléfono:</Text>
+                <Text style={styles.label}>Teléfono: </Text>
                 <Text style={styles.text}>{this.props.globals.detail.phone}</Text>
               </View>) : null }
             { this.props.globals.detail.genre ?
