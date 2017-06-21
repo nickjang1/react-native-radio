@@ -110,7 +110,6 @@ class Home extends Component {
   }
 
   async _search(name: '', location: '', genreId: '') {
-    console.log('SEARCH', name, location, genreId);
     const radios = await Api.getSearch(name, location, genreId);
     this.props.setRadios(radios);
   }

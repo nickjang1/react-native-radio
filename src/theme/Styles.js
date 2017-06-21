@@ -154,20 +154,22 @@ const Styles = {
   },
 
   // Slider Styles
+  sliderRow: {
+    marginLeft: -Metrics.defaultMargin,
+    marginRight: -Metrics.defaultMargin,
+  },
   slider: {
     backgroundColor: 'transparent',
     flex: 1,
     marginTop: -Metrics.defaultMargin,
   },
-  sliderLeftIcon: {
+  sliderIcon: {
     color: Colors.textThird,
     fontSize: 20,
-    marginRight: Metrics.defaultMargin,
   },
-  sliderRightIcon: {
-    color: Colors.textThird,
-    fontSize: 20,
-    marginLeft: Metrics.defaultMargin,
+  sliderButton: {
+    padding: Metrics.defaultPadding,
+    marginTop: -Metrics.defaultMargin,
   },
   sliderTrack: {
     height: 2,
@@ -180,8 +182,8 @@ const Styles = {
     backgroundColor: Colors.textThird,
   },
   sliderThumbTouch: {
-    width: 8,
-    height: 8,
+    width: 40,
+    height: 40,
   },
 };
 

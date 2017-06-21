@@ -108,20 +108,29 @@ class Player extends Component {
       volume: 1.0,
       isLoaded: false,
     };
+    this.unmounted = false;
+    this.volumeListener = null;
   }
 
   componentWillMount() {
     const { params } = this.props.navigation.state;
     ReactNativeAudioStreaming.stop();
+    SystemSetting.setVolume(this.state.volume);
     this.loadingDetailData(params.id);
   }
 
   componentDidMount() {
+    this.unmounted = true;
     this.subscription = DeviceEventEmitter.addListener(
       'AudioBridgeEvent', (evt) => {
         this.props.setPlayerStatus(evt.status);
       },
     );
+
+    this.volumeListener = SystemSetting.addVolumeListener((data) => {
+      this.setState({ volume: data.value });
+    });
+
     ReactNativeAudioStreaming.getStatus((error, status) => {
       if (error) {
         return;
@@ -131,6 +140,8 @@ class Player extends Component {
   }
 
   componentWillUnmount() {
+    this.unmounted = true;
+    SystemSetting.removeVolumeListener(this.volumeListener);
   }
 
   onLayout() {
@@ -199,9 +210,37 @@ class Player extends Component {
     }, 500);
   }
 
-  changeVolume(volume) {
-    // this.setState({ volume });
+  changeVolume(value) {
+    const volume = parseFloat(value);
+    this.setState({
+      volume,
+    });
     SystemSetting.setVolume(volume);
+  }
+
+  increaseVolume() {
+    let volume = this.state.volume;
+    volume += 0.1;
+    if (volume > 1.0) {
+      volume = 1.0;
+    }
+    this.setState({
+      volume,
+    });
+    SystemSetting.setVolume(this.state.volume);
+  }
+
+  decreaseVolume() {
+    let volume = this.state.volume;
+    console.log('DEC', volume);
+    volume -= 0.1;
+    if (volume < 0) {
+      volume = 0;
+    }
+    this.setState({
+      volume,
+    });
+    SystemSetting.setVolume(this.state.volume);
   }
 
   render() {
@@ -280,8 +319,10 @@ class Player extends Component {
 
         {/* PLAYER */}
         <View style={Styles.topContainer}>
-          <View style={Styles.row}>
-            <Icon style={[Styles.sliderLeftIcon]} name={'volume-off'} />
+          <View style={[Styles.row, Styles.sliderRow]}>
+            <TouchableOpacity style={Styles.sliderButton} onPress={this.decreaseVolume.bind(this)}>
+              <Icon style={[Styles.sliderIcon]} name={'volume-off'} />
+            </TouchableOpacity>
             <Slider
               value={this.state.volume}
               trackStyle={Styles.sliderTrack}
@@ -292,7 +333,9 @@ class Player extends Component {
               style={Styles.slider}
               onValueChange={this.changeVolume.bind(this)}
             />
-            <Icon style={Styles.sliderRightIcon} name={'volume-up'} />
+            <TouchableOpacity style={Styles.sliderButton} onPress={this.increaseVolume.bind(this)}>
+              <Icon style={Styles.sliderIcon} name={'volume-up'} />
+            </TouchableOpacity>
           </View>
           <View style={[Styles.row, Styles.center]}>
             <TouchableOpacity onPress={this.onPress} style={Styles.button}>

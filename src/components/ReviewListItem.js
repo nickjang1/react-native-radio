@@ -77,7 +77,6 @@ export default class RadioListItem extends Component {
   }
 
   render() {
-    console.log(this.props.item);
     return (
       <TouchableHighlight
         key={this.props.item.id}
