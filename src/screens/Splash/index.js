@@ -48,13 +48,12 @@ class Splash extends Component {
 
   render() {
     return (
-      <View style={Styles.container}>
+      <View style={[Styles.container]}>
         <Image
           resizeMode={'cover'}
           style={[Styles.background, Styles.horzCenter, Styles.center]}
-          source={Images.bkgSplash} >
+          source={Images.splashBkg} >
           {CommonWidgets.renderStatusBar(Colors.brandPrimary)}
-          {/* <ActivityIndicator size={'large'} style={Styles.center} /> */}
         </Image>
       </View>
     );

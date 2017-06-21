@@ -51,7 +51,7 @@
     "process": false,
     "Promise": false,
     "requestAnimationFrame": true,
-    "require": false,
+    "require": true,
     "Set": true,
     "setImmediate": true,
     "setInterval": false,
