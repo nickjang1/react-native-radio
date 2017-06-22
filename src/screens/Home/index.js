@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
 import ModalDropdown from 'react-native-modal-dropdown';
-import { SearchBar, CheckBox } from 'react-native-elements';
-
-import { Styles, Images, Fonts, Metrics, Colors } from '@theme/';
+import { Styles, Images, Metrics, Colors } from '@theme/';
 import CommonWidgets from '@components/CommonWidgets';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { setRadios } from '@actions/globals';
 import Api from '@api';
-
-import Utils from '@src/utils';
 
 const styles = StyleSheet.create({
   searchTextInput: {
@@ -61,6 +57,9 @@ class Home extends Component {
     };
     this.locationIndex = 0;
     this.genreIndex = 0;
+    this.locationDropdownElement = null;
+    this.genreDropdownElement = null;
+    this.searchTextInputElement = null;
   }
 
   onLayout() {
@@ -114,6 +113,24 @@ class Home extends Component {
     this.props.setRadios(radios);
   }
 
+  searchInitial() {
+    this.locationIndex = 0;
+    this.genreIndex = 0;
+    this.setState({
+      searchKeyword: '',
+    });
+    if (this.locationDropdownElement) {
+      this.locationDropdownElement.select(this.locationIndex);
+    }
+    if (this.genreDropdownElement) {
+      this.genreDropdownElement.select(this.genreIndex);
+    }
+    if (this.searchTextInputElement) {
+      this.searchTextInputElement.focus();
+    }
+    this._search();
+  }
+
   renderHeader() {
     return null;
   }
@@ -124,6 +141,37 @@ class Home extends Component {
     );
   }
   render() {
+    this.locationDropdown = (
+      <ModalDropdown
+        style={Styles.dropdown}
+        dropdownStyle={Styles.dropdownBox}
+        textStyle={Styles.dropdownText}
+        showsVerticalScrollIndicator
+        defaultValue={'Localidad'}
+        defaultIndex={this.state.locationIndex}
+        adjustFrame={(style) => {
+          const output = style;
+          output.width = (this.state.screenWidth - (Metrics.defaultPadding * 4));
+          output.height = this.props.globals.locations.length * (Metrics.dropdownItemHeight + 1);
+          if (output.height > (this.state.screenHeight - 220)) {
+            output.height = parseInt((this.state.screenHeight - 220) / (Metrics.dropdownItemHeight + 1), 0) * (Metrics.dropdownItemHeight + 1);
+          }
+          return output;
+        }}
+        onSelect={item => this.searchLocation(item)}
+        onDropdownWillShow={() => {
+          this.setState({
+            locationPressed: true,
+          });
+        }}
+        onDropdownWillHide={() => {
+          this.setState({
+            locationPressed: false,
+          });
+        }}
+        renderRow={(item, index, highlight) => CommonWidgets.renderLocationMenuListItem(item, index, highlight)}
+        options={this.props.globals.locations} />
+    );
     return (
       <View style={Styles.container} >
         {/* BACKGROUND */}
@@ -140,6 +188,7 @@ class Home extends Component {
           style={Styles.navBarStyle}
           tintColor={Colors.brandSecondary}
           leftButton={CommonWidgets.renderNavBarLeftButton()}
+          rightButton={CommonWidgets.renderNavRightButtonHome(() => { this.searchInitial(); })}
           />
 
         {/* SEARCH BOX */}
@@ -149,6 +198,8 @@ class Home extends Component {
               underlineColorAndroid={'transparent'}
               placeholderTextColor={Colors.textPlaceholder}
               style={styles.searchTextInput}
+              value={this.state.searchKeyword}
+              ref={(element) => { this.searchTextInputElement = element; }}
               placeholder={'Buscar Emisora...'}
               onChangeText={this.onSearchKeywordInputChange.bind(this)}
               onSubmitEditing={() => this.searchName()} />
@@ -167,7 +218,8 @@ class Home extends Component {
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
                 defaultValue={'Localidad'}
-                defaultIndex={0}
+                defaultIndex={this.state.locationIndex}
+                ref={(element) => { this.locationDropdownElement = element; }}
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 4));
@@ -199,7 +251,8 @@ class Home extends Component {
                 textStyle={Styles.dropdownText}
                 showsVerticalScrollIndicator
                 defaultValue={'Género'}
-                defaultIndex={0}
+                defaultIndex={this.state.genreIndex}
+                ref={(element) => { this.genreDropdownElement = element; }}
                 adjustFrame={(style) => {
                   const output = style;
                   output.width = (this.state.screenWidth - (Metrics.defaultPadding * 6)) / 2;

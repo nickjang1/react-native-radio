@@ -98,6 +98,7 @@ const Styles = {
     backgroundColor: Colors.textThird,
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     height: Metrics.dropdownItemHeight,
     paddingLeft: Metrics.defaultPadding * 2,
     paddingRight: Metrics.defaultPadding * 2,
@@ -106,6 +107,7 @@ const Styles = {
     backgroundColor: Colors.backgroundThird,
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     height: Metrics.dropdownItemHeight,
     paddingLeft: Metrics.defaultPadding * 2,
     paddingRight: Metrics.defaultPadding * 2,
@@ -113,18 +115,15 @@ const Styles = {
   dropdownItemIcon: {
     fontSize: 14,
     color: Colors.backgroundPrimary,
-    marginTop: 6,
   },
   dropdownItemIconHighlight: {
     fontSize: 14,
     color: Colors.textThird,
-    marginTop: 6,
   },
   dropdownItemText: {
     fontSize: 14,
     color: Colors.backgroundPrimary,
     marginLeft: Metrics.defaultMargin,
-    marginTop: 4,
   },
   dropdownItemTextHighlight: {
     fontSize: 14,

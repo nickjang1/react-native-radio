@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Image, View } from 'react-native';
+import { Image, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Styles, Images, Metrics, Colors } from '@theme/';
+import { Styles, Images, Colors } from '@theme/';
 
 import CommonWidgets from '@components/CommonWidgets';
 import { setRadios, setLocations, setGenres, setGenreIds } from '@actions/globals';

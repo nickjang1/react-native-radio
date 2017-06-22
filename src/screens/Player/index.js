@@ -105,7 +105,7 @@ class Player extends Component {
       channel: 0,
       channelName: '',
       channelOptions: [],
-      volume: 1.0,
+      volume: 0.5,
       isLoaded: false,
     };
     this.unmounted = false;
