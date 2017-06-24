@@ -185,7 +185,6 @@ class Player extends Component {
     this.props.setDetail(detail);
 
     setTimeout(() => {
-      // SystemSetting.setVolume(this.state.volume);
       ReactNativeAudioStreaming.play(detail.channels[this.state.channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
       const channelOptions = [];
       if (detail && detail.channels) {
@@ -371,11 +370,9 @@ class Player extends Component {
                       return output;
                     }}
                     onSelect={(channel, channelName) => {
-                      ReactNativeAudioStreaming.pause();
                       ReactNativeAudioStreaming.stop();
                       setTimeout(() => {
                         ReactNativeAudioStreaming.play(this.props.globals.detail.channels[channel].stream.url, { showIniOSMediaCenter: true, showInAndroidNotifications: true });
-                        ReactNativeAudioStreaming.resume();
                       }, 1000);
                       this.setState({ channel: parseInt(channel, 0), channelName });
                     }}
