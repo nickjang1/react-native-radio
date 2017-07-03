@@ -12,7 +12,6 @@ import I18n from 'react-native-i18n';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Metrics, Styles, Colors, Fonts, Images } from '@theme/';
 import ReviewListItem from './ReviewListItem';
-import styles from './styles';
 
 const CommonWidgets = {
   showNetworkError(msg = null) {
@@ -44,41 +43,18 @@ const CommonWidgets = {
   renderNavBarLeftButton() {
     return (
       <Image
-        style={styles.navBarLeft}
+        style={Styles.navBarLeft}
         resizeMode={'contain'}
         source={Images.logo} />
-    );
-  },
-
-  renderNavBarRightButton(onPress) {
-    return (
-      <TouchableOpacity
-        style={styles.navBarRightClose}
-        onPress={onPress} >
-        <Image
-          style={styles.navBarRightCloseImage}
-          resizeMode={'contain'}
-          source={Images.close} />
-      </TouchableOpacity>
-    );
-  },
-
-  renderNavBarRightButtonSearch(onPress) {
-    return (
-      <TouchableOpacity
-        style={styles.navbarRightSearch}
-        onPress={onPress} >
-        <Icon name="search" style={styles.navBarRightSearchIcon} />
-      </TouchableOpacity>
     );
   },
 
   renderNavRightButtonHome(onPress) {
     return (
       <TouchableOpacity
-        style={styles.navbarRightSearch}
+        style={Styles.navbarRight}
         onPress={onPress} >
-        <Icon name="home" style={styles.navBarRightSearchIcon} />
+        <Icon name="home" style={Styles.navBarRightIcon} />
       </TouchableOpacity>
     );
   },

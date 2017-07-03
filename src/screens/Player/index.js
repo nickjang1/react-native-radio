@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, DeviceEventEmitter, Image, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  DeviceEventEmitter,
+  Image,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import NavigationBar from 'react-native-navbar';
 import { connect } from 'react-redux';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -142,6 +152,7 @@ class Player extends Component {
   componentWillUnmount() {
     this.unmounted = true;
     SystemSetting.removeVolumeListener(this.volumeListener);
+    this.volumeListener = null;
   }
 
   onLayout() {
@@ -211,9 +222,6 @@ class Player extends Component {
 
   changeVolume(value) {
     const volume = parseFloat(value);
-    this.setState({
-      volume,
-    });
     SystemSetting.setVolume(volume);
   }
 
@@ -223,23 +231,16 @@ class Player extends Component {
     if (volume > 1.0) {
       volume = 1.0;
     }
-    this.setState({
-      volume,
-    });
-    SystemSetting.setVolume(this.state.volume);
+    SystemSetting.setVolume(volume);
   }
 
   decreaseVolume() {
     let volume = this.state.volume;
-    console.log('DEC', volume);
     volume -= 0.1;
     if (volume < 0) {
       volume = 0;
     }
-    this.setState({
-      volume,
-    });
-    SystemSetting.setVolume(this.state.volume);
+    SystemSetting.setVolume(volume);
   }
 
   render() {

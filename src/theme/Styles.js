@@ -15,11 +15,24 @@ const Styles = {
     alignItems: 'center',
   },
   navBarStyle: {
-    paddingHorizontal: 15,
     alignItems: 'flex-end',
     backgroundColor: Colors.brandPrimary,
     height: Metrics.navBarHeight,
     marginTop: Platform.OS === 'ios' ? -Metrics.statusBarHeight : 0,
+  },
+  navBarLeft: {
+    height: Metrics.navBarHeight - (Metrics.defaultMargin * 2),
+    marginLeft: Metrics.defaultMargin,
+    width: Metrics.screenWidth * 0.75,
+    tintColor: Colors.textThird,
+  },
+  navBarRight: {
+    tintColor: Colors.textThird,
+  },
+  navBarRightIcon: {
+    fontSize: 20,
+    color: Colors.textPrimary,
+    margin: Metrics.defaultMargin,
   },
   flex: {
     flex: 1,
