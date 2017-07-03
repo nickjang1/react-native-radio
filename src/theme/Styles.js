@@ -19,7 +19,7 @@ const Styles = {
     alignItems: 'flex-end',
     backgroundColor: Colors.brandPrimary,
     height: Metrics.navBarHeight,
-    marginTop: Platform.OS === 'ios' ? -Metrics.statusBarHeight * 2 : 0,
+    marginTop: Platform.OS === 'ios' ? -Metrics.statusBarHeight : 0,
   },
   flex: {
     flex: 1,
