@@ -52,7 +52,9 @@ class Splash extends Component {
         <Image
           resizeMode={'cover'}
           style={[Styles.background, Styles.center, Styles.hozCenter]}
-          source={Images.splashBkg} />
+          source={Images.splashBkg} >
+          {CommonWidgets.renderStatusBar(Colors.brandPrimary)}
+        </Image>
       </View>
     );
   }

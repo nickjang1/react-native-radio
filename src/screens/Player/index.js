@@ -4,6 +4,7 @@ import {
   DeviceEventEmitter,
   Image,
   Dimensions,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -231,6 +232,9 @@ class Player extends Component {
     if (volume > 1.0) {
       volume = 1.0;
     }
+    if (Platform.OS === 'android') {
+      this.setState({ volume });
+    }
     SystemSetting.setVolume(volume);
   }
 
@@ -239,6 +243,9 @@ class Player extends Component {
     volume -= 0.1;
     if (volume < 0) {
       volume = 0;
+    }
+    if (Platform.OS === 'android') {
+      this.setState({ volume });
     }
     SystemSetting.setVolume(volume);
   }
