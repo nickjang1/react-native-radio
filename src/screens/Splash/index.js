@@ -12,15 +12,6 @@ import Utils from '@src/utils';
 
 let netStateTimer;
 
-const styles = StyleSheet.create({
-  splashTitle: {
-    fontSize: 20,
-    backgroundColor: 'transparent',
-    marginBottom: '100%',
-    color: Colors.textThird,
-  },
-});
-
 class Splash extends Component {
 
   componentDidMount() {
@@ -63,7 +54,6 @@ class Splash extends Component {
           style={[Styles.background, Styles.center, Styles.hozCenter]}
           source={Images.splashBkg} >
           {CommonWidgets.renderStatusBar(Colors.brandPrimary)}
-          <Text style={styles.splashTitle}>EmisorasDominicanasOnline.com</Text>
         </Image>
       </View>
     );

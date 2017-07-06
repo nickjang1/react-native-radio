@@ -11,20 +11,21 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="splashBkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="q1f-Es-e1h">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="splashBkg.png" highlightedImage="splashBkg.png" translatesAutoresizingMaskIntoConstraints="NO" id="yek-Qj-Cku">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="q1f-Es-e1h" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="ccb-B7-kOP"/>
-                <constraint firstItem="q1f-Es-e1h" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="jFY-Th-Aku"/>
+                <constraint firstItem="yek-Qj-Cku" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="0kr-XT-dbR"/>
+                <constraint firstItem="yek-Qj-Cku" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="kdo-gL-EDg"/>
             </constraints>
-            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <point key="canvasLocation" x="547" y="559"/>
         </view>
     </objects>
