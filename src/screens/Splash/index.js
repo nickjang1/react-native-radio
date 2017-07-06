@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Styles, Images, Colors } from '@theme/';
@@ -11,6 +11,15 @@ import Api from '@api';
 import Utils from '@src/utils';
 
 let netStateTimer;
+
+const styles = StyleSheet.create({
+  splashTitle: {
+    fontSize: 20,
+    backgroundColor: 'transparent',
+    marginBottom: '100%',
+    color: Colors.textThird,
+  },
+});
 
 class Splash extends Component {
 
@@ -54,6 +63,7 @@ class Splash extends Component {
           style={[Styles.background, Styles.center, Styles.hozCenter]}
           source={Images.splashBkg} >
           {CommonWidgets.renderStatusBar(Colors.brandPrimary)}
+          <Text style={styles.splashTitle}>EmisorasDominicanasOnline.com</Text>
         </Image>
       </View>
     );
