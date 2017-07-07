@@ -223,6 +223,9 @@ class Player extends Component {
 
   changeVolume(value) {
     const volume = parseFloat(value);
+    if (Platform.OS === 'android') {
+      this.setState({ volume });
+    }
     SystemSetting.setVolume(volume);
   }
 
