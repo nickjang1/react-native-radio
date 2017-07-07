@@ -41,6 +41,7 @@
 		370070321EE2086F004B2B49 /* libStreamingKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 370070311EE2083B004B2B49 /* libStreamingKit.a */; };
 		42F58A0F6D504EA3A1103D42 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55A46455C2504641922998D4 /* Foundation.ttf */; };
 		54CA37181F0EA120006BEED5 /* splashBkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 54CA37171F0EA120006BEED5 /* splashBkg.png */; };
+		54CA374D1F0F0E8C006BEED5 /* UIImage+EM.m in Sources */ = {isa = PBXBuildFile; fileRef = 54CA374C1F0F0E8C006BEED5 /* UIImage+EM.m */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		616775E2F1C34139869B2B84 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A8112C3713C64FEEB6D4CCBC /* EvilIcons.ttf */; };
 		6B7ABD1DF3424891ABDC5DCD /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBE6DBE405A8438592FFAD84 /* Ionicons.ttf */; };
@@ -329,6 +330,8 @@
 		542CA1021EFF3B47007639BE /* RadioProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RadioProject.entitlements; path = RadioProject/RadioProject.entitlements; sourceTree = "<group>"; };
 		5462162BDB344BA0B33F142C /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		54CA37171F0EA120006BEED5 /* splashBkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = splashBkg.png; path = ../assets/images/splashBkg.png; sourceTree = "<group>"; };
+		54CA374B1F0F0E8C006BEED5 /* UIImage+EM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+EM.h"; sourceTree = "<group>"; };
+		54CA374C1F0F0E8C006BEED5 /* UIImage+EM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+EM.m"; sourceTree = "<group>"; };
 		55A46455C2504641922998D4 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		67152EE65E30426A83D79231 /* ReactNativeAudioStreaming.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeAudioStreaming.xcodeproj; path = "../node_modules/react-native-audio-streaming/ios/ReactNativeAudioStreaming.xcodeproj"; sourceTree = "<group>"; };
@@ -498,6 +501,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				54CA374B1F0F0E8C006BEED5 /* UIImage+EM.h */,
+				54CA374C1F0F0E8C006BEED5 /* UIImage+EM.m */,
 			);
 			name = RadioProject;
 			sourceTree = "<group>";
@@ -1163,6 +1168,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				54CA374D1F0F0E8C006BEED5 /* UIImage+EM.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

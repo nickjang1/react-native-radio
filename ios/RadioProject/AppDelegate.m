@@ -11,6 +11,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "UIImage+EM.h"
 
 @implementation AppDelegate
 
@@ -24,14 +25,16 @@
                                                       moduleName:@"RadioProject"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  
+  CGRect bounds = [UIScreen mainScreen].bounds;
+  CGSize size = bounds.size;
+  [rootView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"splashBkg.png" fill:size]]];
+  self.window = [[UIWindow alloc] initWithFrame:bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   return YES;
 }
-
 @end
